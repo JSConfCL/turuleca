@@ -36,7 +36,7 @@ export default async function RootLayout({
         className={classNames(
           "h-screen overflow-hidden bg-slate-950 font-inter",
           // fonts
-          [inter.className, roboto.className],
+          [inter.variable, roboto.variable],
         )}
       >
         <body

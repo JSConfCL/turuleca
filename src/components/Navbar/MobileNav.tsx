@@ -9,12 +9,14 @@ import { NavBarProps } from "./types";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { MobileLink } from "./MobileLink";
 import { Menu, PackageOpen } from "lucide-react";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
+      <ThemeSwitcher />
       <SheetTrigger asChild>
         <Button
           variant="ghost"

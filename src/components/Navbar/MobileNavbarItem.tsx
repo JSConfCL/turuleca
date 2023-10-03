@@ -1,8 +1,41 @@
 "use client";
 
-import { NavbarMenuItem } from "./types";
+import { NavbarMenuItem, NavbarMenuItemChildren } from "./types";
 import { MobileLink } from "./MobileLink";
 
+const mobileItemMapper = (
+  item: NavbarMenuItemChildren,
+  setOpen: (open: boolean) => void,
+) => {
+  if (item.type === "link") {
+    return (
+      <MobileLink
+        key={`mobileitem-${item.content}`}
+        href={item.link}
+        onOpenChange={setOpen}
+        className="text-muted-foreground"
+      >
+        {item.content}
+      </MobileLink>
+    );
+  }
+
+  if (item.type === "button") {
+    return (
+      <span
+        className="text-muted-foreground cursor-pointer"
+        onClick={item.onClick}
+      >
+        {item.content}
+      </span>
+    );
+  }
+
+  if (item.type === "divider") {
+    return <hr className="border-gray-200" />;
+  }
+  // return <h4 className="font-medium text-muted-foreground">{item.content}</h4>;
+};
 export const MobileNavbarItem = ({
   item,
   setOpen,
@@ -10,46 +43,37 @@ export const MobileNavbarItem = ({
   item: NavbarMenuItem;
   setOpen: (open: boolean) => void;
 }) => {
-  const mobileItemMapper = (item: NavbarMenuItem) => {
-    if (item.link) {
-      return (
-        <MobileLink
-          key={`mobileitem-${item.content}`}
-          href={item.link}
-          onOpenChange={setOpen}
-          className="text-muted-foreground"
-        >
-          {item.content}
-        </MobileLink>
-      );
-    }
-
-    if (item.onClick) {
-      return (
-        <span
-          className="text-muted-foreground cursor-pointer"
-          onClick={item.onClick}
-        >
-          {item.content}
-        </span>
-      );
-    }
-
-    return (
-      <h4 className="font-medium text-muted-foreground">{item.content}</h4>
-    );
-  };
-
-  if (item.children) {
+  if (item.type === "dropdown") {
     return (
       <>
         <h4 className="font-medium text-muted-foreground">{item.content}</h4>
-        {item.children
-          .filter((children) => children.content !== "separator")
-          .map(mobileItemMapper)}
+        {item.children.map((e) => mobileItemMapper(e, setOpen))}
       </>
     );
   }
+  if (item.type === "link") {
+    return (
+      <MobileLink
+        key={`mobileitem-${item.content}`}
+        href={item.link}
+        onOpenChange={setOpen}
+        className="text-muted-foreground"
+      >
+        {item.content}
+      </MobileLink>
+    );
+  }
 
-  return mobileItemMapper(item);
+  if (item.type === "button") {
+    return (
+      <span
+        className="text-muted-foreground cursor-pointer"
+        onClick={item.onClick}
+      >
+        {item.content}
+      </span>
+    );
+  }
+
+  return mobileItemMapper(item, setOpen);
 };

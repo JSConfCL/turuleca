@@ -11,23 +11,38 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import classNames from "classnames";
+import { Button } from "../ui/button";
 
 export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
-  if (item.children) {
+  const { type } = item;
+  if (type === "dropdown") {
     return (
       <DropdownMenu>
-        <DropdownMenuTrigger className="text-sm font-medium text-muted-foreground transition-colors hover:text-primar">
-          {item.content}
+        <DropdownMenuTrigger>
+          {item.icon && (
+            <Button variant="ghost" size={item.content ? "default" : "icon"}>
+              {item.icon}
+              {item.content && <span>{item.content}</span>}
+            </Button>
+          )}
+          {!item.icon && item.content && (
+            <Button variant="ghost">
+              <span>{item.content}</span>
+            </Button>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           {item.children.map((children) => {
-            if (children.link) {
+            if (children.type === "link") {
               return (
                 <DropdownMenuItem
-                  key={`dropdown-${item.content}`}
+                  key={`dropdown-${children.type}-${children.content} `}
                   className="cursor-pointer"
                 >
-                  <Link href={children.link} className="flex items-center">
+                  <Link
+                    href={children.link}
+                    className="flex items-center gap-1"
+                  >
                     {children.icon}
                     <span>{children.content}</span>
                   </Link>
@@ -35,7 +50,7 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
               );
             }
 
-            if (children.content === "separator") {
+            if (children.type === "divider") {
               return <DropdownMenuSeparator key={`dropdown-${item.content}`} />;
             }
             return (
@@ -54,11 +69,11 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
     );
   }
 
-  if (item.link) {
+  if (type === "link") {
     return (
       <Link
         href={item.link}
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        // className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
         {item.content}
       </Link>
@@ -66,14 +81,12 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
   }
 
   return (
-    <span
+    <Button
+      variant={"link"}
       onClick={item.onClick}
-      className={classNames(
-        "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
-        item.onClick && "cursor-pointer",
-      )}
+      className={classNames("cursor-pointer")}
     >
       {item.content}
-    </span>
+    </Button>
   );
 };
