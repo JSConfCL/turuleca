@@ -14,7 +14,10 @@
         "plugin:react/recommended",
         "next/core-web-vitals",
         "plugin:@next/next/recommended"
-      ]
+      ],
+      "rules": {
+        "curly": "error"
+      }
     },
     {
       "files": ["*.graphql", "*.gql"],

@@ -77,7 +77,7 @@ const Role = ({ index }: { index: number }) => {
 };
 
 function useInterval(callback: () => void, delay: number) {
-  const savedCallback = useRef<(...args: any[]) => void>();
+  const savedCallback = useRef<(..._args: any[]) => void>();
 
   // Remember the latest callback.
   useEffect(() => {
@@ -90,7 +90,7 @@ function useInterval(callback: () => void, delay: number) {
       savedCallback.current?.();
     }
     if (delay !== null) {
-      let id = setInterval(tick, delay);
+      const id = setInterval(tick, delay);
       return () => clearInterval(id);
     }
   }, [delay]);

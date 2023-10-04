@@ -1,10 +1,5 @@
 "use client";
-import {
-  AnimatePresence,
-  AnimationProps,
-  Transition,
-  motion,
-} from "framer-motion";
+import { AnimatePresence, Transition, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 

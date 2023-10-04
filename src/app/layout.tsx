@@ -1,8 +1,7 @@
-import { Nav } from "@/components/nav";
 import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
-import { ClerkProvider, currentUser } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
 import { NavComponent } from "../components/Navbar/NavBarContext";
 
