@@ -24,7 +24,7 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
     start().catch((e) => {
       console.error(e);
     });
-  }, []);
+  }, [getToken]);
 
   const guestItems: Array<NavbarMenuItem> = [
     {
@@ -44,7 +44,11 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
           content: "Salir",
           type: "button",
           icon: <LogOut className="mr-2 h-4 w-4" />,
-          onClick: () => signOut(),
+          onClick: () => {
+            signOut().catch((e) => {
+              console.error(e);
+            });
+          },
         },
       ],
     },
@@ -62,7 +66,7 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
         </Button>
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none"></div>
-          <nav className="items-center space-x-4 hidden md:flex ">
+          <nav className="hidden items-center space-x-4 md:flex ">
             <ThemeSwitcher />
             <MainNav items={isLogged ? userItems : guestItems} />
           </nav>

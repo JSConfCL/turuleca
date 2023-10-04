@@ -37,9 +37,9 @@ export function MobileNav({ items }: NavBarProps) {
         <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-2">
             <div className="flex flex-col space-y-3 pt-6">
-              {items.map((item) => (
+              {items.map((item, index) => (
                 <MobileNavbarItem
-                  key={`mobile-${item.content}`}
+                  key={`mobile-${item.type}-${index}`}
                   item={item}
                   setOpen={setOpen}
                 />

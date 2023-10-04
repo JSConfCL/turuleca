@@ -31,11 +31,11 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
           )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          {item.children.map((children) => {
+          {item.children.map((children, index) => {
             if (children.type === "link") {
               return (
                 <DropdownMenuItem
-                  key={`dropdown-${children.type}-${children.content} `}
+                  key={`dropdown-${children.type}-${children.link}-${index} `}
                   className="cursor-pointer"
                 >
                   <Link
@@ -50,11 +50,11 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
             }
 
             if (children.type === "divider") {
-              return <DropdownMenuSeparator key={`dropdown-${item.content}`} />;
+              return <DropdownMenuSeparator key={`dropdown-${index}`} />;
             }
             return (
               <DropdownMenuItem
-                key={`dropdown-${item.content}`}
+                key={`dropdown-${index}`}
                 onClick={children.onClick}
                 className={classNames(children.onClick && "cursor-pointer")}
               >

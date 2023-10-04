@@ -2,7 +2,7 @@ import { useRouter } from "next/navigation";
 import Link, { LinkProps } from "next/link";
 import classNames from "classnames";
 
-interface MobileLinkProps extends LinkProps {
+interface MobileLinkProps extends LinkProps<{}> {
   onOpenChange?: (open: boolean) => void;
   children: React.ReactNode;
   className?: string;
@@ -20,6 +20,7 @@ export function MobileLink({
     <Link
       href={href}
       onClick={() => {
+        // @ts-expect-error some bad typing
         router.push(href.toString());
         onOpenChange?.(false);
       }}

@@ -37,7 +37,7 @@ export const LayoutTransition = ({
     }
 
     exitAnimationDivRef.current?.appendChild(
-      lastPageRef.current![0].cloneNode(true),
+      lastPageRef.current[0].cloneNode(true),
     );
     lastPageRef.current = currentPageRef.current.children;
   }, [pathname]);
@@ -47,7 +47,7 @@ export const LayoutTransition = ({
       <div className="h-full w-full">
         <motion.div
           key={pathname + "exit-animation"}
-          className="w-full absolute pointer-events-none"
+          className="pointer-events-none absolute w-full"
           initial={basePosition}
           animate={exitedPosition}
           transition={transition}
@@ -60,7 +60,7 @@ export const LayoutTransition = ({
           initial={exitedPosition}
           animate={basePosition}
           transition={transition}
-          className="absolute w-full m-y-0 m-x-auto"
+          className="absolute mx-auto my-0 w-full"
         >
           <div ref={currentPageRef}>{children}</div>
         </motion.div>

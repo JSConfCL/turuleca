@@ -10,7 +10,7 @@ const mobileItemMapper = (
   if (item.type === "link") {
     return (
       <MobileLink
-        key={`mobileitem-${item.content}`}
+        key={`mobileitem-${item.link}`}
         href={item.link}
         onOpenChange={setOpen}
         className="text-muted-foreground"
@@ -23,7 +23,7 @@ const mobileItemMapper = (
   if (item.type === "button") {
     return (
       <span
-        className="text-muted-foreground cursor-pointer"
+        className="cursor-pointer text-muted-foreground"
         onClick={item.onClick}
       >
         {item.content}
@@ -54,7 +54,7 @@ export const MobileNavbarItem = ({
   if (item.type === "link") {
     return (
       <MobileLink
-        key={`mobileitem-${item.content}`}
+        key={`mobileitem-${item.link}`}
         href={item.link}
         onOpenChange={setOpen}
         className="text-muted-foreground"
@@ -67,7 +67,7 @@ export const MobileNavbarItem = ({
   if (item.type === "button") {
     return (
       <span
-        className="text-muted-foreground cursor-pointer"
+        className="cursor-pointer text-muted-foreground"
         onClick={item.onClick}
       >
         {item.content}
