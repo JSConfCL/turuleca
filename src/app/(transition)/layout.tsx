@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@clerk/nextjs";
-import { AnimatePresence, LazyMotion, domAnimation } from "framer-motion";
 import React, { useEffect } from "react";
+import { LayoutTransition } from "./ClientLayout";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { getToken } = useAuth();
@@ -17,11 +17,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       console.error(e);
     });
   }, []);
+
   return (
     <div className="h-full overflow-hidden">
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence mode="sync">{children}</AnimatePresence>
-      </LazyMotion>
+      <LayoutTransition>{children}</LayoutTransition>
     </div>
   );
 }
