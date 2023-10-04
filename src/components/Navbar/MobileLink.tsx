@@ -20,7 +20,6 @@ export function MobileLink({
     <Link
       href={href}
       onClick={() => {
-        // @ts-expect-error some bad typing
         router.push(href.toString());
         onOpenChange?.(false);
       }}
