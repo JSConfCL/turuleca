@@ -45,7 +45,7 @@ const Role = ({ index }: { index: number }) => {
   return (
     <motion.span
       className={
-        "absolute inset-0 flex justify-center items-center whitespace-nowrap text-center transition-all"
+        "absolute inset-0 flex items-center justify-center whitespace-nowrap text-center transition-all"
       }
       exit={{
         y: 30,
@@ -104,7 +104,7 @@ export const Roles = () => {
   }, 5000);
 
   return (
-    <span className="relative text-center block h-16 md:h-28 align-middle w-full -rotate-3 xl:-rotate-2 text-4xl md:text-5xl xl:text-6xl font-bold leading-snug">
+    <span className="relative block h-16 w-full -rotate-3 text-center align-middle text-4xl font-bold leading-snug md:h-28 md:text-5xl xl:-rotate-2 xl:text-6xl">
       <AnimatePresence>
         <Role key={titleIndex} index={titleIndex} />
       </AnimatePresence>
