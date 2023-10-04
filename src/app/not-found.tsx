@@ -2,10 +2,10 @@ export const runtime = "edge";
 
 export default function NotFoundPage() {
   return (
-    <html lang="en">
-      <body>
-        <div>test</div>
-      </body>
-    </html>
+    <div>
+      <h2>Not Found</h2>
+      <p>Could not find requested resource</p>
+      <a href="/">Return Home</a>
+    </div>
   );
 }
