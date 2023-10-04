@@ -1,4 +1,10 @@
-import { AnimatePresence, Transition, motion } from "framer-motion";
+"use client";
+import {
+  AnimatePresence,
+  AnimationProps,
+  Transition,
+  motion,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -6,8 +12,16 @@ const transition: Transition = {
   ease: [0.77, 0.2, 0.8, 1],
   duration: 0.2,
 };
-const basePosition = { y: 0, opacity: 1 };
-const exitedPosition = { y: 100, opacity: 0 };
+const basePosition = {
+  y: 0,
+  opacity: 1,
+  display: "block",
+};
+const exitedPosition = {
+  y: 100,
+  opacity: 0,
+  display: "none",
+};
 
 export const LayoutTransition = ({
   children,
@@ -35,10 +49,10 @@ export const LayoutTransition = ({
 
   return (
     <AnimatePresence initial={false}>
-      <div>
+      <div className="h-full w-full">
         <motion.div
           key={pathname + "exit-animation"}
-          className="w-full absolute"
+          className="w-full absolute pointer-events-none"
           initial={basePosition}
           animate={exitedPosition}
           transition={transition}
@@ -51,7 +65,7 @@ export const LayoutTransition = ({
           initial={exitedPosition}
           animate={basePosition}
           transition={transition}
-          className="w-full"
+          className="absolute w-full m-y-0 m-x-auto"
         >
           <div ref={currentPageRef}>{children}</div>
         </motion.div>

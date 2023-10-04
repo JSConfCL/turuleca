@@ -4,6 +4,7 @@ import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ClerkProvider, currentUser } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
+import { NavComponent } from "../components/Navbar/NavBarContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -28,35 +29,34 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const user = await currentUser();
   return (
-    <ClerkProvider>
-      <html
-        lang="es"
+    <html
+      lang="es"
+      className={classNames(
+        " font-inter",
+        // fonts
+        [inter.variable, roboto.variable],
+      )}
+    >
+      <body
         className={classNames(
-          "h-screen overflow-hidden bg-slate-950 font-inter",
-          // fonts
-          [inter.variable, roboto.variable],
+          inter.variable,
+          roboto.variable,
+          "dark:bg-slate-950 bg-white",
         )}
       >
-        <body
-          className={classNames(
-            inter.variable,
-            roboto.variable,
-            "h-full overflow-hidden",
-          )}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Nav isLogged={user !== null} />
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+          <ClerkProvider>
+            <NavComponent />
+          </ClerkProvider>
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
