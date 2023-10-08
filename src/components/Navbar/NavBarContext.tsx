@@ -1,6 +1,6 @@
 "use client";
 import { Nav } from "@/components/nav";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/nextjs";
 
 export const NavComponent = () => {
   const { isLoaded, userId } = useAuth();

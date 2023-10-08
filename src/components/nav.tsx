@@ -5,7 +5,7 @@ import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { LogOut, User, PackageOpen } from "lucide-react";
-import { useAuth, useClerk } from "@clerk/clerk-react";
+import { useAuth, useClerk } from "@clerk/nextjs";
 import { NavbarMenuItem } from "./Navbar/types";
 import { Button } from "./ui/button";
 import { useEffect } from "react";
