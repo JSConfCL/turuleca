@@ -1,4 +1,5 @@
-import { useRouter } from "next/navigation";
+"use client";
+// import { useRouter } from "next/navigation";
 import Link, { LinkProps } from "next/link";
 import classNames from "classnames";
 
@@ -15,12 +16,10 @@ export function MobileLink({
   children,
   ...props
 }: MobileLinkProps) {
-  const router = useRouter();
   return (
     <Link
       href={href}
       onClick={() => {
-        router.push(href.toString());
         onOpenChange?.(false);
       }}
       className={classNames(className)}

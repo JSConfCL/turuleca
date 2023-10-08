@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { importantLinks, routes } from "../lib/routes";
 import { Button } from "../components/ui/button";
-import { ExternalTextLink } from "../components/TextLink";
+import { ExternalTextLink } from "../components/TextLink/External";
 
 export default function NotFoundPage() {
   return (
@@ -23,7 +22,7 @@ export default function NotFoundPage() {
           </ExternalTextLink>
         </p>
         <Button asChild>
-          <Link href={routes.home}>Volver al Home</Link>
+          <a href={routes.home}>Volver al Home</a>
         </Button>
       </div>
     </div>

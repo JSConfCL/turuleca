@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 
 import {
@@ -7,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { importantLinks } from "../../lib/routes";
-import { ExternalTextLink } from "../TextLink";
+import { ExternalTextLink } from "../TextLink/External";
 
 export const FAQS = () => {
   return (
