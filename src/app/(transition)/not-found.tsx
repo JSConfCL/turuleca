@@ -1,6 +1,6 @@
-import { importantLinks, routes } from "../lib/routes";
-import { Button } from "../components/ui/button";
-import { ExternalTextLink } from "../components/TextLink/External";
+import { importantLinks, routes } from "../../lib/routes";
+import { Button } from "../../components/ui/button";
+import { ExternalTextLink } from "../../components/TextLink/External";
 
 export default function NotFoundPage() {
   return (
