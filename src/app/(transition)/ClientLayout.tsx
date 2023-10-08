@@ -46,7 +46,7 @@ export const LayoutTransition = ({
     <AnimatePresence initial={false}>
       <div className="h-full w-full">
         <motion.div
-          key={pathname + "exit-animation"}
+          key={pathname ?? "page" + "exit-animation"}
           className="pointer-events-none absolute w-full"
           initial={basePosition}
           animate={exitedPosition}
@@ -56,7 +56,7 @@ export const LayoutTransition = ({
         </motion.div>
 
         <motion.div
-          key={pathname}
+          key={pathname ?? "page"}
           initial={exitedPosition}
           animate={basePosition}
           transition={transition}

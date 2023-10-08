@@ -1,8 +1,22 @@
 import "./globals.css";
+import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
 import { NavComponent } from "../components/Navbar/NavBarContext";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["500", "700", "900"],
+});
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  display: "swap",
+  weight: ["400", "700"],
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -15,8 +29,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={classNames(" font-inter")}>
-      <body className={classNames("dark:bg-slate-950 bg-white")}>
+    <html
+      lang="es"
+      className={classNames(
+        " font-inter",
+        // fonts
+        [inter.variable, roboto.variable],
+      )}
+    >
+      <body
+        className={classNames(
+          inter.variable,
+          roboto.variable,
+          "dark:bg-slate-950 bg-white",
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

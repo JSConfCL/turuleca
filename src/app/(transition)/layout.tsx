@@ -4,5 +4,3 @@ import { LayoutTransition } from "./ClientLayout";
 export default function Layout({ children }: { children: React.ReactNode }) {
   return <LayoutTransition>{children}</LayoutTransition>;
 }
-
-export const runtime = "edge";
