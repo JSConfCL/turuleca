@@ -5,12 +5,19 @@ import { MainNav } from "./Navbar/MainNav";
 import { MobileNav } from "./Navbar/MobileNav";
 import { ThemeSwitcher } from "./Navbar/ThemeSwitcher";
 import { LogOut, User, PackageOpen } from "lucide-react";
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { useAuth, useClerk } from "@clerk/clerk-react";
 import { NavbarMenuItem } from "./Navbar/types";
 import { Button } from "./ui/button";
 import { useEffect } from "react";
+import { routes } from "../lib/routes";
 
-export const Nav = ({ isLogged }: { isLogged: boolean }) => {
+export const Nav = ({
+  isLogged,
+  isLoaded,
+}: {
+  isLogged: boolean;
+  isLoaded: boolean;
+}) => {
   const { signOut } = useClerk();
   const { getToken } = useAuth();
 
@@ -58,7 +65,7 @@ export const Nav = ({ isLogged }: { isLogged: boolean }) => {
     <header className="supports-backdrop-blur:bg-background/60 sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
       <div className="container flex h-14 items-center">
         <Button variant={"link"} asChild>
-          <Link href="/">
+          <Link href={routes.home}>
             <PackageOpen className="h-5 w-5" />
           </Link>
           {/* <div className="px-0"> */}

@@ -1,7 +1,8 @@
+"use client";
 import { Nav } from "@/components/nav";
-import { currentUser } from "@clerk/nextjs";
+import { useAuth } from "@clerk/clerk-react";
 
-export const NavComponent = async () => {
-  const user = await currentUser();
-  return <Nav isLogged={user !== null} />;
+export const NavComponent = () => {
+  const { isLoaded, userId } = useAuth();
+  return <Nav isLogged={Boolean(userId)} isLoaded={isLoaded} />;
 };

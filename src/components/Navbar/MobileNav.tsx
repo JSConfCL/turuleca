@@ -10,6 +10,7 @@ import { MobileNavbarItem } from "./MobileNavbarItem";
 import { MobileLink } from "./MobileLink";
 import { Menu, PackageOpen } from "lucide-react";
 import { ThemeSwitcher } from "./ThemeSwitcher";
+import { routes } from "../../lib/routes";
 
 export function MobileNav({ items }: NavBarProps) {
   const [open, setOpen] = React.useState(false);
@@ -28,7 +29,7 @@ export function MobileNav({ items }: NavBarProps) {
       </SheetTrigger>
       <SheetContent side="left" className="pr-0">
         <MobileLink
-          href="/"
+          href={routes.home}
           className="flex items-center"
           onOpenChange={setOpen}
         >

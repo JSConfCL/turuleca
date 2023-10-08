@@ -1,9 +1,9 @@
 import "./globals.css";
 import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
-import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/providers";
 import { NavComponent } from "../components/Navbar/NavBarContext";
+import { AuthLayout } from "./(transition)/AuthLayout";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -50,10 +50,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ClerkProvider>
+          <AuthLayout>
             <NavComponent />
-          </ClerkProvider>
-          {children}
+            {children}
+          </AuthLayout>
         </ThemeProvider>
       </body>
     </html>

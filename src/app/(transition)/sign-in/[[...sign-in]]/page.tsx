@@ -1,4 +1,5 @@
-import { SignIn } from "@clerk/nextjs";
+"use client";
+import { SignIn } from "@clerk/clerk-react";
 
 export default function Page() {
   return (
@@ -9,5 +10,3 @@ export default function Page() {
     </main>
   );
 }
-
-export const runtime = "edge";

@@ -40,29 +40,35 @@ const colorBackgrounds = [
   "bg-red-500 text-white",
 ];
 
+const exit = {
+  y: -20,
+  opacity: 0,
+};
+const initial = {
+  y: -20,
+  opacity: 0,
+};
+const animate = {
+  y: 0,
+  opacity: 1,
+};
+
+const transition = {
+  duration: 0.5,
+  ease: "easeInOut",
+};
+
 const Role = ({ index }: { index: number }) => {
   const title = titles[index];
   return (
     <motion.span
       className={
-        "absolute inset-0 flex items-center justify-center whitespace-nowrap text-center transition-all"
+        "absolute inset-x-0 flex items-center justify-center whitespace-nowrap text-center transition-all"
       }
-      exit={{
-        y: 30,
-        opacity: 0,
-      }}
-      initial={{
-        y: -30,
-        opacity: 0,
-      }}
-      animate={{
-        y: -5,
-        opacity: 1,
-      }}
-      transition={{
-        duration: 0.5,
-        ease: "linear",
-      }}
+      exit={exit}
+      initial={initial}
+      animate={animate}
+      transition={transition}
     >
       <span
         className={classNames(
@@ -104,8 +110,8 @@ export const Roles = () => {
   }, 5000);
 
   return (
-    <span className="relative block h-16 w-full -rotate-3 text-center align-middle text-4xl font-bold leading-snug md:h-28 md:text-5xl xl:-rotate-2 xl:text-6xl">
-      <AnimatePresence>
+    <span className="relative block h-16 w-full text-center align-middle text-4xl font-bold leading-snug md:h-28 md:text-5xl xl:text-6xl">
+      <AnimatePresence mode="wait">
         <Role key={titleIndex} index={titleIndex} />
       </AnimatePresence>
     </span>

@@ -1,6 +1,10 @@
 import { Button } from "../../../components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Roles } from "./roles";
+import { importantLinks, routes } from "../../../lib/routes";
+import Link from "next/link";
+import { FAQS } from "../../../components/Faqs";
+import { ExternalTextLink } from "../../../components/TextLink";
 
 export default function Home() {
   return (
@@ -12,7 +16,7 @@ export default function Home() {
               aria-roledescription="h1"
               className="z-20 translate-x-0 text-center text-4xl font-bold  leading-snug transition-all md:text-5xl xl:text-6xl"
             >
-              <span>Descubre lo que </span>
+              <span>Descubre cuanto </span>
               <span className="select-none whitespace-nowrap bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 bg-clip-text font-extrabold  tracking-tight text-transparent dark:from-indigo-500 dark:via-purple-500 dark:to-pink-500">
                 realmente
               </span>{" "}
@@ -20,9 +24,9 @@ export default function Home() {
             </h1>
             <Roles />
           </div>
-          <p className="max-w-5xl self-center px-6 font-roboto text-xl md:text-2xl">
-            Comparte tu salario de forma segura, y descubre cómo se compara con
-            otros en tu campo y seniority!
+          <p className="max-w-4xl self-center px-8 font-roboto text-xl md:text-2xl">
+            Comparte tu salario de forma segura, anónima, y descubre cómo se
+            compara con otros en tu campo, area, y seniority.
           </p>
           <div>
             <img
@@ -32,37 +36,70 @@ export default function Home() {
             />
           </div>
           <div>
-            <Button size="lg" className="px-10 py-8 text-xl">
-              Regístrate
-              <ArrowRight />
+            <Button asChild size="lg" className="px-10 py-8 text-xl">
+              <Link href={routes.signIn}>
+                Regístrate
+                <ArrowRight />
+              </Link>
             </Button>
           </div>
         </section>
 
+        <section className="mx-auto flex w-10/12 flex-row gap-8 text-center">
+          <div className="flex w-1/2 flex-auto flex-col gap-6">
+            <h2 className="text-4xl font-bold ">Que es XXXXX XXXXX?</h2>
+            <p className="font-roboto text-lg">
+              Es una iniciativa de la cómunidad de JavascriptChile. Nuestra
+              misión es ayudar a otros profesionales a entender mejor su valor
+              en el mercado, y negociar salarios de manera informada!
+            </p>
+          </div>
+          <div className="flex w-1/2 flex-auto flex-col gap-6">
+            <h2 className="text-4xl font-bold">Cómo Funciona?</h2>
+            <p className="font-roboto text-lg">
+              Solo 3 simples pasos.
+              <ol className="list-inside list-decimal">
+                <li className="">
+                  <span className="font-bold">Regístrate</span>
+                </li>
+                <li className="">
+                  <span className="font-bold">Comparte</span> tu información
+                  laboral (Salario, seniority, etc)
+                </li>
+                <li className="">
+                  <span className="font-bold">Listo</span> ahora puedes ver
+                  información relacionada a tu campo, area, y seniority.
+                </li>
+              </ol>
+            </p>
+          </div>
+        </section>
         <section className="mx-auto w-1/2 text-center">
-          <h2 className="mb-4 text-3xl font-bold">Que es XXXXXXXXXX?</h2>
-          <p className="mb-4 font-roboto text-lg">
-            Somos un grupo de desarrolladores y gente del area tech. Nuestra
-            misión es ayudar a otros profesionales a entender mejor su valor en
-            el mercado, y negociar salarios de manera informada!
-          </p>
+          <hr />
         </section>
 
         <section className="mx-auto w-1/2 text-center">
-          <h2 className="mb-4 text-3xl font-bold">Precio</h2>
-          <p className="mb-4 font-roboto text-lg">
-            Nope, no hay precio, es 100% gratis. ❤️ (Y OpenSource).
+          <hr />
+        </section>
+        <section className="mx-auto flex w-1/2 flex-col gap-6 text-center">
+          <h2 className="text-3xl font-bold">Cuanto Cuesta?</h2>
+          <p className="font-roboto text-lg">
+            Es 100% gratis. ❤️ (Y OpenSource).
           </p>
-          <p className="mb-4 text-lg italic">
-            Pero si nos quieres ayudar, contáctate con nosotros{" "}
-            <a href="mailto:contacto@jschile.org" className="text-blue-500">
-              contacto@jschile.org
-            </a>
+          <p className="text-lg">
+            Si nos quieres ayudar, comparte el sitio con tus amigos, y colegas!
+            <br />
           </p>
+        </section>
+        <section className="mx-auto w-1/2 text-center">
+          <hr />
+        </section>
+
+        <section className="mx-auto flex w-full flex-col gap-6 md:w-8/12">
+          <h2 className="text-center text-3xl font-bold">FAQ</h2>
+          <FAQS />
         </section>
       </div>
     </main>
   );
 }
-
-export const runtime = "edge";
