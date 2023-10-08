@@ -1,10 +1,9 @@
 import { Button } from "../../../components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Roles } from "./roles";
-import { importantLinks, routes } from "../../../lib/routes";
+import { routes } from "../../../lib/routes";
 import Link from "next/link";
 import { FAQS } from "../../../components/Faqs";
-import { ExternalTextLink } from "../../../components/TextLink";
 
 export default function Home() {
   return (
@@ -56,9 +55,9 @@ export default function Home() {
           </div>
           <div className="flex w-1/2 flex-auto flex-col gap-6">
             <h2 className="text-4xl font-bold">Cómo Funciona?</h2>
-            <p className="font-roboto text-lg">
-              Solo 3 simples pasos.
-              <ol className="list-inside list-decimal">
+            <p className="font-roboto text-lg ">
+              Es bastante simple! Son solamente 3 pasos:
+              <ol className="ml-[1em] list-outside list-decimal text-justify">
                 <li className="">
                   <span className="font-bold">Regístrate</span>
                 </li>
@@ -74,13 +73,11 @@ export default function Home() {
             </p>
           </div>
         </section>
-        <section className="mx-auto w-1/2 text-center">
-          <hr />
-        </section>
 
         <section className="mx-auto w-1/2 text-center">
           <hr />
         </section>
+
         <section className="mx-auto flex w-1/2 flex-col gap-6 text-center">
           <h2 className="text-3xl font-bold">Cuanto Cuesta?</h2>
           <p className="font-roboto text-lg">
@@ -91,6 +88,7 @@ export default function Home() {
             <br />
           </p>
         </section>
+
         <section className="mx-auto w-1/2 text-center">
           <hr />
         </section>

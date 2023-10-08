@@ -11,13 +11,7 @@ import { Button } from "./ui/button";
 import { useEffect } from "react";
 import { routes } from "../lib/routes";
 
-export const Nav = ({
-  isLogged,
-  isLoaded,
-}: {
-  isLogged: boolean;
-  isLoaded: boolean;
-}) => {
+export const Nav = ({ isLogged }: { isLogged: boolean; isLoaded: boolean }) => {
   const { signOut } = useClerk();
   const { getToken } = useAuth();
 
