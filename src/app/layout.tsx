@@ -3,7 +3,7 @@ import { Inter, Roboto } from "next/font/google";
 import classNames from "classnames";
 import { ThemeProvider } from "@/components/providers";
 import { NavComponent } from "../components/Navbar/NavBarContext";
-import { AuthLayout } from "./(transition)/AuthLayout";
+import { AuthLayout } from "../components/AuthLayout";
 
 const inter = Inter({
   subsets: ["latin"],

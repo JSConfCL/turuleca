@@ -1,6 +1,6 @@
 import { Button } from "../../../components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { Roles } from "./roles";
+import { Roles } from "../../../components/roles";
 import { routes } from "../../../lib/routes";
 import Link from "next/link";
 import { FAQS } from "../../../components/Faqs";
