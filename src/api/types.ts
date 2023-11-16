@@ -46,12 +46,6 @@ export type Community = {
   users: Array<User>;
 };
 
-export type CommunityCreateInput = {
-  description: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-  slug: Scalars['String']['input'];
-};
-
 /** Representation of a workEmail */
 export type Company = {
   __typename?: 'Company';
@@ -72,6 +66,12 @@ export enum CompanyStatus {
   Draft = 'draft',
   Inactive = 'inactive'
 }
+
+export type CreateCommunityInput = {
+  description: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  slug: Scalars['String']['input'];
+};
 
 export type CreateCompanyInput = {
   description: InputMaybe<Scalars['String']['input']>;
@@ -95,6 +95,12 @@ export type CreateSalaryInput = {
   workMetodology: WorkMetodology;
   workRoleId: Scalars['String']['input'];
   yearsOfExperience: Scalars['Int']['input'];
+};
+
+export type EnqueueGoogleAlbumImportInput = {
+  albumId: Scalars['String']['input'];
+  sanityEventInstanceId: Scalars['String']['input'];
+  token: Scalars['String']['input'];
 };
 
 /** Representation of an Event (Events and Users, is what tickets are linked to) */
@@ -196,8 +202,12 @@ export type Mutation = {
   createEvent: Event;
   /** Create a salary */
   createSalary: Salary;
+  /** Edit an community */
+  editCommunity: Community;
   /** Edit a ticket */
   editTicket: Ticket;
+  /** Enqueue images to import */
+  enqueueGoogleAlbumImport: Scalars['Boolean']['output'];
   /** Redeem a ticket */
   redeemUserTicket: UserTicket;
   /** Kickoff the email validation flow. This flow will links an email to a user, create a company if it does not exist, and allows filling data for that email's position */
@@ -226,7 +236,7 @@ export type MutationCancelUserTicketArgs = {
 
 
 export type MutationCreateCommunityArgs = {
-  input: CommunityCreateInput;
+  input: CreateCommunityInput;
 };
 
 
@@ -245,8 +255,18 @@ export type MutationCreateSalaryArgs = {
 };
 
 
+export type MutationEditCommunityArgs = {
+  input: UpdateCommunityInput;
+};
+
+
 export type MutationEditTicketArgs = {
   input: TicketEditInput;
+};
+
+
+export type MutationEnqueueGoogleAlbumImportArgs = {
+  input: EnqueueGoogleAlbumImportInput;
 };
 
 
@@ -306,6 +326,8 @@ export type Query = {
   event: Maybe<Event>;
   /** Get a list of events. Filter by name, id, status or date */
   events: Array<Event>;
+  /** Get the current user */
+  me: User;
   /** Get a list of tickets for the current user */
   myTickets: Array<UserTicket>;
   status: Scalars['String']['output'];
@@ -383,6 +405,17 @@ export type Salary = {
   workMetodology: WorkMetodology;
   workRole: WorkRole;
   yearsOfExperience: Scalars['Int']['output'];
+};
+
+/** Representation of a Sanity Asset */
+export type SanityAssetRef = {
+  __typename?: 'SanityAssetRef';
+  assetId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  originalFilename: Scalars['String']['output'];
+  path: Scalars['String']['output'];
+  size: Scalars['Int']['output'];
+  url: Scalars['String']['output'];
 };
 
 export type SearchCompaniesInput = {
@@ -476,6 +509,14 @@ export enum TypeOfEmployment {
   PartTime = 'partTime'
 }
 
+export type UpdateCommunityInput = {
+  communityId: Scalars['String']['input'];
+  description: InputMaybe<Scalars['String']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  slug: InputMaybe<Scalars['String']['input']>;
+  status: InputMaybe<CommnunityStatus>;
+};
+
 export type UpdateCompanyInput = {
   companyId: Scalars['String']['input'];
   description: InputMaybe<Scalars['String']['input']>;
@@ -506,6 +547,7 @@ export type User = {
   bio: Maybe<Scalars['String']['output']>;
   communities: Array<Community>;
   id: Scalars['String']['output'];
+  isSuperAdmin: Maybe<Scalars['Boolean']['output']>;
   lastName: Maybe<Scalars['String']['output']>;
   name: Maybe<Scalars['String']['output']>;
   username: Scalars['String']['output'];

@@ -5,12 +5,21 @@ type LinkItem = {
   newTab?: boolean;
   icon?: React.ReactNode;
 };
-type ButtonItem = {
-  type: "button";
-  content?: React.ReactNode;
-  onClick?: (e: React.MouseEvent<HTMLElement>) => void;
-  icon?: React.ReactNode;
-};
+type ButtonItem =
+  | {
+      type: "button";
+      content?: React.ReactNode;
+      onClick: (e: React.MouseEvent<HTMLElement>) => void;
+      link?: never;
+      icon?: React.ReactNode;
+    }
+  | {
+      type: "button";
+      content?: React.ReactNode;
+      onClick?: never;
+      link: string;
+      icon?: React.ReactNode;
+    };
 
 type DropdownItem =
   | {

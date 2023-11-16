@@ -1,7 +1,5 @@
 export const routes = {
   home: "/",
-  signIn: "/sign-in",
-  signUp: "/sign-up",
   onboarding: {
     root: "/onboarding",
     yourInfo: "/onboarding/your-info",

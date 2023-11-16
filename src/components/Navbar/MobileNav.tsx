@@ -9,7 +9,6 @@ import { NavBarProps } from "./types";
 import { MobileNavbarItem } from "./MobileNavbarItem";
 import { MobileLink } from "./MobileLink";
 import { Menu, PackageOpen } from "lucide-react";
-import { ThemeSwitcher } from "./ThemeSwitcher";
 import { routes } from "../../lib/routes";
 
 export function MobileNav({ items }: NavBarProps) {
@@ -17,7 +16,6 @@ export function MobileNav({ items }: NavBarProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <ThemeSwitcher />
       <SheetTrigger asChild>
         <Button
           variant="ghost"

@@ -74,8 +74,24 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
         href={item.link}
         // className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
       >
-        {item.content}
+        <span className="flex gap-2">
+          {item.icon && <span>{item.icon}</span>}
+          {item.content && <span>{item.content}</span>}
+        </span>
       </Link>
+    );
+  }
+
+  if (item.link) {
+    return (
+      <Button asChild variant={"link"} className={classNames("cursor-pointer")}>
+        <Link href={item.link}>
+          <span className="flex gap-2">
+            {item.icon && <span>{item.icon}</span>}
+            {item.content && <span>{item.content}</span>}
+          </span>
+        </Link>
+      </Button>
     );
   }
 
@@ -85,7 +101,10 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
       onClick={item.onClick}
       className={classNames("cursor-pointer")}
     >
-      {item.content}
+      <span className="flex gap-2">
+        {item.icon && <span>{item.icon}</span>}
+        {item.content && <span>{item.content}</span>}
+      </span>
     </Button>
   );
 };

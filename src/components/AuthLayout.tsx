@@ -1,12 +1,27 @@
+"use client";
+import { ClerkProvider } from "@clerk/clerk-react";
 import React from "react";
 
-import { ClerkProvider } from "@clerk/nextjs";
-const clerkPubKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+type Props = {
+  children: React.ReactNode;
+};
 
-if (!clerkPubKey) {
-  throw new Error("Missing NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY");
-}
-
-export const AuthLayout = ({ children }: { children: React.ReactNode }) => {
-  return <ClerkProvider publishableKey={clerkPubKey}>{children}</ClerkProvider>;
+export const Clerk = ({ children }: Props) => {
+  return (
+    <ClerkProvider
+      supportEmail="contacto@jschile.org"
+      localization={{
+        locale: "es-ES",
+      }}
+      isSatellite={process.env.NEXT_PUBLIC_CLERK_IS_SATELLITE === "true"}
+      // TODO: Esto no debería existir. Borrarlo cuando deployiemos a producción
+      domain={(url) => {
+        const splitted = url.host.split(".");
+        return [splitted.at(-2), splitted.at(-1)].join(".");
+      }}
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+    >
+      {children}
+    </ClerkProvider>
+  );
 };
