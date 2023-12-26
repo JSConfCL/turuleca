@@ -1,6 +1,5 @@
 "use client";
-import { SignedIn, SignedOut, useAuth } from "@clerk/clerk-react";
-import { useRouter } from "next/navigation";
+import { SignIn, SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorBoundary } from "../../../src/components/ErrorBoundary";
 
@@ -9,36 +8,23 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isLoaded, isSignedIn } = useAuth();
   const [redirectUrl, setRedirectUrl] = useState(
     typeof window !== "undefined" ? window.location.host : "",
   );
-  const router = useRouter();
   useEffect(() => {
-    setRedirectUrl(window.location.host);
+    setRedirectUrl(window.location.toString());
   }, []);
 
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      window.location.href = `${process.env
-        .NEXT_PUBLIC_SIGN_IN_URL!}?redirect_url=https://${redirectUrl}`;
-    }
-  }, [isLoaded, isSignedIn, redirectUrl, router]);
-
   return (
-    <main className="mx-auto max-w-5xl p-4">
+    <main className="container flex flex-1 justify-center p-4 pt-40">
       <SignedIn>
         <Suspense>
-          <ErrorBoundary
-            onError={() => {
-              router.push("/", {});
-            }}
-          >
-            {children}
-          </ErrorBoundary>
+          <ErrorBoundary>{children}</ErrorBoundary>
         </Suspense>
       </SignedIn>
-      <SignedOut></SignedOut>
+      <SignedOut>
+        <SignIn redirectUrl={redirectUrl} />
+      </SignedOut>
     </main>
   );
 }

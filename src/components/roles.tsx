@@ -1,7 +1,12 @@
 "use client";
 import classNames from "classnames";
-import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  AnimationDefinition,
+  motion,
+  Transition,
+} from "framer-motion";
+import { forwardRef, useEffect, useRef, useState, ElementRef } from "react";
 
 const titles = [
   "FrontEnd",
@@ -32,55 +37,57 @@ const titles = [
 ];
 
 const colorBackgrounds = [
-  "bg-yellow-300 text-black",
-  "bg-pink-500 text-white",
-  "bg-purple-500 text-white",
-  "bg-blue-500 text-white",
-  "bg-green-500 text-white",
-  "bg-red-500 text-white",
+  "bg-yellow-300/90 text-black",
+  "bg-pink-500/90 text-white",
+  "bg-purple-500/90 text-white",
+  "bg-blue-500/90 text-white",
+  "bg-green-500/90 text-white",
+  "bg-red-500/90 text-white",
 ];
 
 const exit = {
-  y: -20,
+  y: 20,
   opacity: 0,
-};
+} satisfies AnimationDefinition;
 const initial = {
   y: -20,
   opacity: 0,
-};
+} satisfies AnimationDefinition;
 const animate = {
   y: 0,
   opacity: 1,
-};
+} satisfies AnimationDefinition;
 
 const transition = {
-  duration: 0.5,
-  ease: "easeInOut",
-};
+  ease: "anticipate",
+  duration: 0.6,
+} satisfies Transition;
 
-const Role = ({ index }: { index: number }) => {
-  const title = titles[index];
-  return (
-    <motion.span
-      className={
-        "absolute inset-x-0 flex items-center justify-center whitespace-nowrap text-center transition-all"
-      }
-      exit={exit}
-      initial={initial}
-      animate={animate}
-      transition={transition}
-    >
-      <span
-        className={classNames(
-          colorBackgrounds[index % colorBackgrounds.length],
-          "px-3 py-1 xl:px-5 xl:py-2 md:px-4 md:py-2",
-        )}
+const Role = forwardRef<ElementRef<typeof motion.span>, { index: number }>(
+  ({ index }, ref) => {
+    const title = titles[index];
+    return (
+      <motion.span
+        className={"absolute left-0 top-0 whitespace-nowrap text-center"}
+        ref={ref}
+        exit={exit}
+        initial={initial}
+        animate={animate}
+        transition={transition}
       >
-        {title}
-      </span>
-    </motion.span>
-  );
-};
+        <span
+          className={classNames(
+            colorBackgrounds[index % colorBackgrounds.length],
+            "px-3 py-1 xl:px-5 xl:py-2 md:px-4 md:py-2",
+          )}
+        >
+          {title}
+        </span>
+      </motion.span>
+    );
+  },
+);
+Role.displayName = "Role";
 
 function useInterval(callback: () => void, delay: number) {
   const savedCallback = useRef<(..._args: any[]) => void>();
@@ -107,13 +114,13 @@ export const Roles = () => {
   useInterval(() => {
     // go over every title and go back to the first one when we reach the end.
     setTitleIndex((prevIndex) => (prevIndex + 1) % titles.length);
-  }, 5000);
+  }, 1750);
 
   return (
-    <span className="relative block h-16 w-full text-center align-middle text-4xl font-bold leading-snug md:h-28 md:text-5xl xl:text-6xl">
-      <AnimatePresence mode="wait">
+    <div className="relative min-h-[20px] min-w-[20px]">
+      <AnimatePresence mode="sync" initial={false}>
         <Role key={titleIndex} index={titleIndex} />
       </AnimatePresence>
-    </span>
+    </div>
   );
 };

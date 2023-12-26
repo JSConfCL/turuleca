@@ -146,6 +146,22 @@ export type EventCreateInput = {
   visibility: InputMaybe<EventVisibility>;
 };
 
+export type EventEditInput = {
+  address: InputMaybe<Scalars['String']['input']>;
+  description: InputMaybe<Scalars['String']['input']>;
+  endDateTime: InputMaybe<Scalars['DateTime']['input']>;
+  eventId: Scalars['String']['input'];
+  latitude: InputMaybe<Scalars['String']['input']>;
+  longitude: InputMaybe<Scalars['String']['input']>;
+  maxAttendees: InputMaybe<Scalars['Int']['input']>;
+  meetingURL: InputMaybe<Scalars['String']['input']>;
+  name: InputMaybe<Scalars['String']['input']>;
+  startDateTime: InputMaybe<Scalars['DateTime']['input']>;
+  status: InputMaybe<EventStatus>;
+  timeZone: InputMaybe<Scalars['String']['input']>;
+  visibility: InputMaybe<EventVisibility>;
+};
+
 export enum EventStatus {
   Active = 'active',
   Inactive = 'inactive'
@@ -204,6 +220,8 @@ export type Mutation = {
   createSalary: Salary;
   /** Edit an community */
   editCommunity: Community;
+  /** Edit an event */
+  editEvent: Event;
   /** Edit a ticket */
   editTicket: Ticket;
   /** Enqueue images to import */
@@ -257,6 +275,11 @@ export type MutationCreateSalaryArgs = {
 
 export type MutationEditCommunityArgs = {
   input: UpdateCommunityInput;
+};
+
+
+export type MutationEditEventArgs = {
+  input: EventEditInput;
 };
 
 
@@ -334,6 +357,8 @@ export type Query = {
   /** Get a list of tags */
   tags: Array<Tag>;
   /** Get a list of users */
+  userSearch: Array<User>;
+  /** Get a list of users */
   users: Array<User>;
   /** Get a workEmail and check if its validated for this user */
   workEmail: WorkEmail;
@@ -387,6 +412,11 @@ export type QueryTagsArgs = {
 };
 
 
+export type QueryUserSearchArgs = {
+  input: UserSearchInput;
+};
+
+
 export type QueryWorkEmailArgs = {
   email: Scalars['String']['input'];
 };
@@ -424,6 +454,12 @@ export type SearchCompaniesInput = {
   domain: InputMaybe<Scalars['String']['input']>;
   website: InputMaybe<Scalars['String']['input']>;
 };
+
+export enum SearchableUserTags {
+  CoreTeam = 'CORE_TEAM',
+  DevTeam = 'DEV_TEAM',
+  Donor = 'DONOR'
+}
 
 /** Representation of a tag. Tags can be associated to many things. An event, a community, etc. */
 export type Tag = {
@@ -597,6 +633,10 @@ export type UserEditInput = {
   lastName: InputMaybe<Scalars['String']['input']>;
   name: InputMaybe<Scalars['String']['input']>;
   username: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserSearchInput = {
+  tags: InputMaybe<Array<SearchableUserTags>>;
 };
 
 

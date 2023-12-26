@@ -3,7 +3,7 @@ import { NavbarItem } from "./NavbarItem";
 
 export function MainNav({ items }: NavBarProps) {
   return (
-    <nav className={"items-center space-x-4 lg:space-x-6"}>
+    <nav className={"flex items-center justify-end gap-4"}>
       {items.map((item, index) => (
         <NavbarItem key={`navbarItem-${index}`} item={item} />
       ))}

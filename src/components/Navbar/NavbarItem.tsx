@@ -42,7 +42,7 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
                     href={children.link}
                     className="flex items-center gap-1"
                   >
-                    {children.icon}
+                    <span>{children.icon}</span>
                     <span>{children.content}</span>
                   </Link>
                 </DropdownMenuItem>
@@ -56,9 +56,12 @@ export const NavbarItem = ({ item }: { item: NavbarMenuItem }) => {
               <DropdownMenuItem
                 key={`dropdown-${index}`}
                 onClick={children.onClick}
-                className={classNames(children.onClick && "cursor-pointer")}
+                className={classNames(
+                  children.onClick && "cursor-pointer",
+                  "flex items-center gap-1",
+                )}
               >
-                {children.icon}
+                <span>{children.icon}</span>
                 <span>{children.content}</span>
               </DropdownMenuItem>
             );

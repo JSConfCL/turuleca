@@ -53,8 +53,9 @@ export const FAQS = () => {
           ¿Cómo puedo contribuir?
         </AccordionTrigger>
         <AccordionContent className="font-roboto !text-lg text-gray-400">
-          Genial! Puedes ayudar compartiendo el sitio con tus amigos, y colegas.
-          Si quieres ayudar con código, puedes contribuir al proyecto en{" "}
+          Genial! Puedes ayudar compartiendo el sitio con tus amistades, y
+          colegas. Si quieres ayudar con código, puedes contribuir al proyecto
+          en{" "}
           <ExternalTextLink href={importantLinks.repo}>
             el repo de github
           </ExternalTextLink>{" "}
