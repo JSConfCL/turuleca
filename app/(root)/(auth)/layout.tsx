@@ -16,7 +16,7 @@ export default function AuthLayout({
   }, []);
 
   return (
-    <main className="container flex flex-1 justify-center p-4 pt-40">
+    <main className="container flex flex-1 justify-center p-4 pt-32">
       <SignedIn>
         <Suspense>
           <ErrorBoundary>{children}</ErrorBoundary>

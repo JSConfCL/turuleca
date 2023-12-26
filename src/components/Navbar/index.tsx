@@ -87,7 +87,7 @@ export const NavBar = () => {
 
   return (
     <header className="supports-backdrop-blur:bg-background/60 fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-      <div className="container flex h-14 items-center">
+      <div className="container flex h-14 items-center px-1">
         <Button variant={"link"} asChild>
           <Link href={routes.home}>
             <PackageOpen className="h-5 w-5" />

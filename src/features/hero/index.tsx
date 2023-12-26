@@ -35,7 +35,7 @@ const Text = () => (
       </h1>
     </div>
     <div className="grid grid-cols-7 gap-8">
-      <p className="col-span-6 text-lg font-semibold sm:col-span-7 sm:text-2xl md:col-span-7 md:text-3xl">
+      <p className="col-span-7 text-lg font-semibold sm:col-span-7 sm:text-2xl md:col-span-7 md:text-3xl">
         Comparte tu salario de forma segura, anónima, y compara con otros en tu
         campo, area, y seniority.
       </p>
