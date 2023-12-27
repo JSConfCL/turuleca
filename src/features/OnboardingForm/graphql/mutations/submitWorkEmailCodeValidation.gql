@@ -1,0 +1,6 @@
+mutation SubmitWorkEmailCodeValidation($confirmationToken: String!) {
+  validateWorkEmail(confirmationToken: $confirmationToken) {
+    id
+    isValidated
+  }
+}

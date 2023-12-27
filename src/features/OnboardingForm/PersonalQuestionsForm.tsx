@@ -23,7 +23,7 @@ const formSchema = z.object({
   }),
 });
 
-export const PersonalQuestions = () => {
+export const PersonalQuestionsForm = () => {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -1,0 +1,6 @@
+query GetOnboardingInformation($email: String!) {
+  workEmail(email: $email) {
+    id
+    isValidated
+  }
+}

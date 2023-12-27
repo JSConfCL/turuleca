@@ -15,17 +15,41 @@ const config = {
   ...defaultConfig,
   ignoreNoDocuments: true,
   generates: {
-    "src/api/types.ts": {
+    "src/api/gql/": {
+      preset: "client",
+      plugins: [noTypeCheckingPlugin],
+      config: {
+        useTypeImports: true,
+        skipTypename: true,
+        avoidOptionals: true,
+        nonOptionalTypename: false,
+        // Lamentablemente, code-gen establece "any" como predeterminado, cuando no tiene un
+        // tipo para un "scalar". Esta opción nos obliga a definir un tipo cada vez que
+        // queremos usar un escalar sin tipo.
+        defaultScalarType: "unknown",
+        scalars: {
+          Date: "string",
+          DateTime: "string",
+        },
+      },
+    },
+    "./src/api/gql/schema.gql": {
+      plugins: ["schema-ast"],
+    },
+    "src/": {
+      preset: "near-operation-file",
+      presetConfig: {
+        extension: ".generated.tsx",
+        baseTypesPath: "api/gql/graphql.ts",
+      },
       plugins: [
-        "typescript",
         "typescript-operations",
-        "typescript-graphql-request",
+        "typescript-react-apollo",
+        // "./codegen-apollo-hooks.js",
         noTypeCheckingPlugin,
       ],
       config: {
-        avoidOptionals: true,
-        useTypeImports: true,
-        defaultScalarType: "unknown",
+        apolloReactHooksImportFrom: "@/api/ApolloHooks",
       },
     },
   },

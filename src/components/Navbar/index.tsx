@@ -15,6 +15,8 @@ import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { routes } from "../../lib/routes";
 import Image from "next/image";
+import cookieLibrary from "js-cookie";
+import { AUTH_COOKIE_NAME } from "../../api/types";
 
 export const NavBar = () => {
   const { userId } = useAuth();
@@ -32,7 +34,9 @@ export const NavBar = () => {
       const token = await getToken({
         template: "API_AUTH",
       });
-      console.log({ token });
+      if (token) {
+        cookieLibrary.set(AUTH_COOKIE_NAME, token);
+      }
     };
     start().catch((e) => {
       console.error(e);

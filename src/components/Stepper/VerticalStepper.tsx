@@ -6,7 +6,7 @@ type Step = {
   id: string;
   number: number;
   title: string;
-  description: string;
+  description?: string;
 };
 
 type VerticalStepperProps = {
@@ -28,23 +28,32 @@ const StepComponent = ({
   step,
   isCurrent,
   isInThePast,
+  isInTheFuture,
 }: StepComponentProps) => {
   return (
     <div
       className={cx("flex items-center transition-all", {
-        "opacity-55": isInThePast,
+        "opacity-50": isInThePast,
+        "opacity-40": isInTheFuture,
       })}
     >
       <div className="grid grid-cols-[20px_auto] items-start gap-x-4 transition-all duration-300">
         <div
           className={cx(
-            "z-10 flex h-6 w-6 translate-x-0 items-center justify-center rounded-full border-2 border-gray-300 bg-black transition-all mt-[2px]",
+            "z-10 flex h-6 w-6 translate-x-0 items-baseline justify-center rounded-full border-2 border-gray-300 bg-black transition-all font-bold",
             {
-              "border-green-500": isCurrent,
+              "border-yellow-400 text-yellow-400": isCurrent,
+              "border-green-500 text-green-500": isInThePast,
             },
           )}
         >
-          {isInThePast ? <Check size={12} /> : <small>{step.number}</small>}
+          {isInThePast ? (
+            <div className="self-center">
+              <Check size={12} />
+            </div>
+          ) : (
+            <small>{step.number}</small>
+          )}
         </div>
         <h4
           className={cx("font-semibold transition-all", {
@@ -72,7 +81,7 @@ export const VerticalStepper: React.FC<VerticalStepperProps> = ({
   currentStepIndex,
 }: VerticalStepperProps) => {
   return (
-    <div className="flex flex-col items-start gap-4">
+    <div className="flex flex-col items-start gap-6">
       {steps.map((step, index) => (
         <StepComponent
           key={step.id}
