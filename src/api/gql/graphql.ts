@@ -85,7 +85,7 @@ export type CreateSalaryInput = {
   companyId: Scalars['String']['input'];
   confirmationToken: Scalars['String']['input'];
   countryCode: Scalars['String']['input'];
-  currencyId: Scalars['String']['input'];
+  currencyCode: Scalars['String']['input'];
   gender: Gender;
   genderOtherText: Scalars['String']['input'];
   typeOfEmployment: TypeOfEmployment;
@@ -93,6 +93,12 @@ export type CreateSalaryInput = {
   workRoleId: Scalars['String']['input'];
   yearsOfExperience: Scalars['Int']['input'];
 };
+
+export enum EmailStatus {
+  Confirmed = 'confirmed',
+  Pending = 'pending',
+  Rejected = 'rejected'
+}
 
 export type EnqueueGoogleAlbumImportInput = {
   albumId: Scalars['String']['input'];
@@ -347,6 +353,8 @@ export type Query = {
   me: User;
   /** Get a list of tickets for the current user */
   myTickets: Array<UserTicket>;
+  /** Get a list of salaries associated to the user */
+  salaries: Array<Salary>;
   status: Scalars['String']['output'];
   /** Get a list of tags */
   tags: Array<Tag>;
@@ -356,6 +364,10 @@ export type Query = {
   users: Array<User>;
   /** Get a workEmail and check if its validated for this user */
   workEmail: WorkEmail;
+  /** Get a list of validated work emails for the user */
+  workEmails: Array<ValidatedWorkEmail>;
+  /** Get a list of possible work roles */
+  workRoles: Array<WorkRole>;
 };
 
 
@@ -420,7 +432,7 @@ export type Salary = {
   amount: Scalars['Int']['output'];
   company: Company;
   countryCode: Scalars['String']['output'];
-  currency: AllowedCurrency;
+  currencyCode: Scalars['String']['output'];
   gender: Maybe<Gender>;
   genderOtherText: Maybe<Scalars['String']['output']>;
   id: Scalars['String']['output'];
@@ -553,18 +565,17 @@ export type UpdateCompanyInput = {
 };
 
 export type UpdateSalaryInput = {
-  amount: Scalars['Int']['input'];
-  companyId: Scalars['String']['input'];
+  amount: InputMaybe<Scalars['Int']['input']>;
   confirmationToken: Scalars['String']['input'];
-  countryCode: Scalars['String']['input'];
-  currencyId: Scalars['String']['input'];
-  gender: Gender;
-  genderOtherText: Scalars['String']['input'];
+  countryCode: InputMaybe<Scalars['String']['input']>;
+  currencyCode: InputMaybe<Scalars['String']['input']>;
+  gender: InputMaybe<Gender>;
+  genderOtherText: InputMaybe<Scalars['String']['input']>;
   salaryId: Scalars['String']['input'];
-  typeOfEmployment: TypeOfEmployment;
-  workMetodology: WorkMetodology;
-  workRoleId: Scalars['String']['input'];
-  yearsOfExperience: Scalars['Int']['input'];
+  typeOfEmployment: InputMaybe<TypeOfEmployment>;
+  workMetodology: InputMaybe<WorkMetodology>;
+  workRoleId: InputMaybe<Scalars['String']['input']>;
+  yearsOfExperience: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** Representation of a user */
@@ -587,7 +598,17 @@ export type UserTicket = {
   status: TicketStatus;
 };
 
-/** Representation of a workEmail */
+/** Representation of a work email associated to the current user */
+export type ValidatedWorkEmail = {
+  company: Maybe<Company>;
+  confirmationDate: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['String']['output'];
+  isValidated: Scalars['Boolean']['output'];
+  status: EmailStatus;
+  workEmail: Scalars['String']['output'];
+};
+
+/** Representation of a (yet to validate) work email */
 export type WorkEmail = {
   id: Scalars['String']['output'];
   isValidated: Scalars['Boolean']['output'];
@@ -625,6 +646,15 @@ export type UserSearchInput = {
   tags: InputMaybe<Array<SearchableUserTags>>;
 };
 
+export type SalaryFragment = { amount: number, countryCode: string, currencyCode: string, gender: Gender | null, genderOtherText: string | null, id: string, typeOfEmployment: TypeOfEmployment, workMetodology: WorkMetodology, yearsOfExperience: number, company: { description: string | null, domain: string }, workRole: { description: string, id: string, name: string, seniority: string } } & { ' $fragmentName'?: 'SalaryFragment' };
+
+export type CreateSalaryMutationVariables = Exact<{
+  input: CreateSalaryInput;
+}>;
+
+
+export type CreateSalaryMutation = { createSalary: { ' $fragmentRefs'?: { 'SalaryFragment': SalaryFragment } } };
+
 export type SubmitWorkEmailMutationVariables = Exact<{
   email: Scalars['String']['input'];
 }>;
@@ -639,6 +669,18 @@ export type SubmitWorkEmailCodeValidationMutationVariables = Exact<{
 
 export type SubmitWorkEmailCodeValidationMutation = { validateWorkEmail: { id: string, isValidated: boolean } };
 
+export type UpdateSalaryMutationVariables = Exact<{
+  input: UpdateSalaryInput;
+}>;
+
+
+export type UpdateSalaryMutation = { updateSalary: { ' $fragmentRefs'?: { 'SalaryFragment': SalaryFragment } } };
+
+export type GetUserSalariesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUserSalariesQuery = { salaries: Array<{ ' $fragmentRefs'?: { 'SalaryFragment': SalaryFragment } }> };
+
 export type GetOnboardingInformationQueryVariables = Exact<{
   email: Scalars['String']['input'];
 }>;
@@ -646,7 +688,16 @@ export type GetOnboardingInformationQueryVariables = Exact<{
 
 export type GetOnboardingInformationQuery = { workEmail: { id: string, isValidated: boolean } };
 
+export type GetWorkEmailsStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
+
+export type GetWorkEmailsStatusQuery = { workEmails: Array<{ id: string, isValidated: boolean, status: EmailStatus, workEmail: string }> };
+
+export const SalaryFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Salary"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Salary"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"company"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}}]}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"genderOtherText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"typeOfEmployment"}},{"kind":"Field","name":{"kind":"Name","value":"workMetodology"}},{"kind":"Field","name":{"kind":"Name","value":"workRole"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seniority"}}]}},{"kind":"Field","name":{"kind":"Name","value":"yearsOfExperience"}}]}}]} as unknown as DocumentNode<SalaryFragment, unknown>;
+export const CreateSalaryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateSalary"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateSalaryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createSalary"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Salary"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Salary"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Salary"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"company"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}}]}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"genderOtherText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"typeOfEmployment"}},{"kind":"Field","name":{"kind":"Name","value":"workMetodology"}},{"kind":"Field","name":{"kind":"Name","value":"workRole"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seniority"}}]}},{"kind":"Field","name":{"kind":"Name","value":"yearsOfExperience"}}]}}]} as unknown as DocumentNode<CreateSalaryMutation, CreateSalaryMutationVariables>;
 export const SubmitWorkEmailDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SubmitWorkEmail"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"startWorkEmailValidation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isValidated"}}]}}]}}]} as unknown as DocumentNode<SubmitWorkEmailMutation, SubmitWorkEmailMutationVariables>;
 export const SubmitWorkEmailCodeValidationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SubmitWorkEmailCodeValidation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"confirmationToken"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"validateWorkEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"confirmationToken"},"value":{"kind":"Variable","name":{"kind":"Name","value":"confirmationToken"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isValidated"}}]}}]}}]} as unknown as DocumentNode<SubmitWorkEmailCodeValidationMutation, SubmitWorkEmailCodeValidationMutationVariables>;
+export const UpdateSalaryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateSalary"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateSalaryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateSalary"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Salary"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Salary"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Salary"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"company"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}}]}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"genderOtherText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"typeOfEmployment"}},{"kind":"Field","name":{"kind":"Name","value":"workMetodology"}},{"kind":"Field","name":{"kind":"Name","value":"workRole"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seniority"}}]}},{"kind":"Field","name":{"kind":"Name","value":"yearsOfExperience"}}]}}]} as unknown as DocumentNode<UpdateSalaryMutation, UpdateSalaryMutationVariables>;
+export const GetUserSalariesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserSalaries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"salaries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Salary"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Salary"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Salary"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"company"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}}]}},{"kind":"Field","name":{"kind":"Name","value":"countryCode"}},{"kind":"Field","name":{"kind":"Name","value":"currencyCode"}},{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}},{"kind":"Field","name":{"kind":"Name","value":"genderOtherText"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"typeOfEmployment"}},{"kind":"Field","name":{"kind":"Name","value":"workMetodology"}},{"kind":"Field","name":{"kind":"Name","value":"workRole"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"seniority"}}]}},{"kind":"Field","name":{"kind":"Name","value":"yearsOfExperience"}}]}}]} as unknown as DocumentNode<GetUserSalariesQuery, GetUserSalariesQueryVariables>;
 export const GetOnboardingInformationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOnboardingInformation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workEmail"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isValidated"}}]}}]}}]} as unknown as DocumentNode<GetOnboardingInformationQuery, GetOnboardingInformationQueryVariables>;
+export const GetWorkEmailsStatusDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkEmailsStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workEmails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isValidated"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"workEmail"}}]}}]}}]} as unknown as DocumentNode<GetWorkEmailsStatusQuery, GetWorkEmailsStatusQueryVariables>;

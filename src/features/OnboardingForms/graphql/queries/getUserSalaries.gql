@@ -1,0 +1,5 @@
+query GetUserSalaries {
+  salaries {
+    ...Salary
+  }
+}

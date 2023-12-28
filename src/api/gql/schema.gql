@@ -64,7 +64,7 @@ input CreateSalaryInput {
   companyId: String!
   confirmationToken: String!
   countryCode: String!
-  currencyId: String!
+  currencyCode: String!
   gender: Gender!
   genderOtherText: String!
   typeOfEmployment: TypeOfEmployment!
@@ -82,6 +82,12 @@ scalar Date
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+enum EmailStatus {
+  confirmed
+  pending
+  rejected
+}
 
 input EnqueueGoogleAlbumImportInput {
   albumId: String!
@@ -272,6 +278,9 @@ type Query {
 
   """Get a list of tickets for the current user"""
   myTickets(input: MyTicketsSearchInput): [UserTicket!]!
+
+  """Get a list of salaries associated to the user"""
+  salaries: [Salary!]!
   status(name: String): String!
 
   """Get a list of tags"""
@@ -285,6 +294,12 @@ type Query {
 
   """Get a workEmail and check if its validated for this user"""
   workEmail(email: String!): WorkEmail!
+
+  """Get a list of validated work emails for the user"""
+  workEmails: [ValidatedWorkEmail!]!
+
+  """Get a list of possible work roles"""
+  workRoles: [WorkRole!]!
 }
 
 """Representation of a workEmail"""
@@ -292,7 +307,7 @@ type Salary {
   amount: Int!
   company: Company!
   countryCode: String!
-  currency: AllowedCurrency!
+  currencyCode: String!
   gender: Gender
   genderOtherText: String
   id: String!
@@ -427,18 +442,17 @@ input UpdateCompanyInput {
 }
 
 input UpdateSalaryInput {
-  amount: Int!
-  companyId: String!
+  amount: Int
   confirmationToken: String!
-  countryCode: String!
-  currencyId: String!
-  gender: Gender!
-  genderOtherText: String!
+  countryCode: String
+  currencyCode: String
+  gender: Gender
+  genderOtherText: String
   salaryId: String!
-  typeOfEmployment: TypeOfEmployment!
-  workMetodology: WorkMetodology!
-  workRoleId: String!
-  yearsOfExperience: Int!
+  typeOfEmployment: TypeOfEmployment
+  workMetodology: WorkMetodology
+  workRoleId: String
+  yearsOfExperience: Int
 }
 
 """Representation of a user"""
@@ -461,7 +475,17 @@ type UserTicket {
   status: TicketStatus!
 }
 
-"""Representation of a workEmail"""
+"""Representation of a work email associated to the current user"""
+type ValidatedWorkEmail {
+  company: Company
+  confirmationDate: DateTime
+  id: String!
+  isValidated: Boolean!
+  status: EmailStatus!
+  workEmail: String!
+}
+
+"""Representation of a (yet to validate) work email"""
 type WorkEmail {
   id: String!
   isValidated: Boolean!

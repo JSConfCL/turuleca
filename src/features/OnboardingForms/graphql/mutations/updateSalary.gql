@@ -1,0 +1,5 @@
+mutation UpdateSalary($input: UpdateSalaryInput!) {
+  updateSalary(input: $input) {
+    ...Salary
+  }
+}

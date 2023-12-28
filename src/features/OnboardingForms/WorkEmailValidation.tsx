@@ -3,7 +3,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,22 +25,29 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { verticalTransitionProps } from "../../components/FramerTransitions/VerticalTransitionContainer";
 import { useSubmitWorkEmailMutation } from "./graphql/mutations/submitWorkEmail.generated";
-import { useGetOnboardingInformationLazyQuery } from "./graphql/queries/getOnboardingInformation.generated";
 import { useSubmitWorkEmailCodeValidationMutation } from "./graphql/mutations/submitWorkEmailCodeValidation.generated";
+import { useGetOnboardingInformationLazyQuery } from "./graphql/queries/getWorkEmailInformation.generated";
+import { z } from "../../components/Forms/zod";
 
 const AnimatedCardHeader = motion(CardHeader);
 const AnimatedCardContent = motion(CardContent);
 const emailSchema = z.object({
-  email: z.string().email({
-    message: "Email inválido.",
-  }),
+  email: z
+    .string()
+    .email({
+      message: "Email inválido.",
+    })
+    .trim(),
 });
 
 const codeSchema = z.object({
-  email: z.string().email(),
-  verificationCode: z.string().min(2, {
-    message: "Email inválido.",
-  }),
+  email: z.string().email().trim(),
+  verificationCode: z
+    .string()
+    .min(2, {
+      message: "Email inválido.",
+    })
+    .trim(),
 });
 
 enum Step {

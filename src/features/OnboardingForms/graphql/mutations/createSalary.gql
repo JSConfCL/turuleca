@@ -1,0 +1,5 @@
+mutation CreateSalary($input: CreateSalaryInput!) {
+  createSalary(input: $input) {
+    ...Salary
+  }
+}

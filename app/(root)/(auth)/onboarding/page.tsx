@@ -1,78 +1,48 @@
 "use client";
-import React, { useMemo, useState } from "react";
-import { VerticalStepper } from "../../../../src/components/Stepper/VerticalStepper";
-import { Button } from "../../../../src/components/ui/button";
-import { Form } from "../../../../src/features/OnboardingForm";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../../../src/components/ui/card";
+import React from "react";
+import { OnboardingForms, OnboardingStep } from "@/features/OnboardingForms";
+import { useGetWorkEmailsStatusSuspenseQuery } from "../../../../src/features/OnboardingForms/graphql/queries/getWorkEmailsStatus.generated";
+import { EmailStatus } from "../../../../src/api/gql/graphql";
 
 const steps = [
   {
     id: "1",
     number: 1,
-    title: "Verifica tu correo laboral.",
+    title: "Tu correo",
+    description: "Valida tu correo laboral..",
   },
   {
     id: "2",
     number: 2,
-    title: "Step Two long text for test 2 asdao pouadsf fasd fsad dsafosahuo",
-    description: "This is the second step.",
+    title: "Tu rol",
+    description: "Cuéntanos de tu salario y cargo.",
   },
   {
     id: "3",
     number: 3,
-    title: "Step Three",
-    description:
-      "This is the third step. long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text long text",
+    title: "Listo!",
   },
-];
+] satisfies OnboardingStep[];
+
+const Suspended = () => {
+  const { data } = useGetWorkEmailsStatusSuspenseQuery();
+  const initialStep =
+    data?.workEmails?.filter(
+      (workEmail) => workEmail.status === EmailStatus.Confirmed,
+    ).length >= 1
+      ? 1
+      : 0;
+  return <OnboardingForms steps={steps} initialStep={initialStep} />;
+};
 
 export default function Page() {
   // TODO: Pull data and create the steps dynamically.
   // And set the current step differently from the index.
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const moveNext = () => {
-    setCurrentStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
-  };
-  const movePrev = () => {
-    setCurrentStepIndex((prev) => Math.max(prev - 1, 0));
-  };
-  const currentStep = useMemo(
-    () => steps[currentStepIndex],
-    [currentStepIndex],
-  );
   return (
     <div className="grid grid-cols-12 gap-8">
-      <div className="col-span-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-right">Falta poco 🎉</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <VerticalStepper
-              steps={steps}
-              currentStepIndex={currentStepIndex}
-            />
-          </CardContent>
-          <CardFooter className="flex flex-row gap-4">
-            <Button onClick={movePrev}>Prev Step</Button>
-            <Button onClick={moveNext}>Next Step</Button>
-          </CardFooter>
-        </Card>
-      </div>
-      <div className="col-span-8 flex flex-col gap-4">
-        <Card>
-          <Form
-            stepId={currentStep.id}
-            setCurrentStepIndex={setCurrentStepIndex}
-          />
-        </Card>
-      </div>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <Suspended />
+      </React.Suspense>
     </div>
   );
 }
