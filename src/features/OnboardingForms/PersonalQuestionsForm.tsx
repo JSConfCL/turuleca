@@ -22,10 +22,13 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { useGetUserSalariesSuspenseQuery } from "./graphql/queries/getUserSalaries.generated";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { Skeleton } from "../../components/ui/skeleton";
-import { TypeOfEmployment, WorkMetodology } from "../../api/gql/graphql";
+import {
+  Gender,
+  TypeOfEmployment,
+  WorkMetodology,
+} from "../../api/gql/graphql";
 import { z } from "../../components/Forms/zod";
 import {
   Select,
@@ -35,6 +38,8 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Separator } from "../../components/ui/separator";
+import { GetWorkEmailsStatusQuery } from "./graphql/queries/getWorkEmailsStatus.generated";
+import { useCreateSalaryMutation } from "./graphql/mutations/createSalary.generated";
 
 const mapOfEmploymentType: Record<TypeOfEmployment, string> = {
   [TypeOfEmployment.Freelance]: "Freelance",
@@ -48,49 +53,173 @@ const mapOfWorkMetodology: Record<WorkMetodology, string> = {
   [WorkMetodology.Hybrid]: "Híbrido",
 };
 
+// input CreateSalaryInput {
+//   amount: Int!
+//   currencyCode: String!
+//   yearsOfExperience: Int!
+//   workRoleId: String!
+
+//   typeOfEmployment: TypeOfEmployment!
+//   workMetodology: WorkMetodology!
+//   countryCode: String!
+
+//   gender: Gender!
+//   genderOtherText: String!
+
+//   confirmationToken: String!
+
+//   companyId: String!
+// }
+
 const formSchema = z.object({
-  salaryAmount: z.number().min(0, {
-    message: "Tu salario no puede ser negativo.",
-  }),
-  countryCode: z.string().min(1).trim(),
-  gender: z.string().trim(),
-  genderOtherText: z.string().trim(),
-  typeOfEmployment: z.nativeEnum(TypeOfEmployment),
-  workMetodology: z.nativeEnum(WorkMetodology),
+  workRoleId: z.string().min(1).trim(),
+  workSeniorityId: z.string().min(1).trim(),
   yearsOfExperience: z.number().min(0, {
     message: "No puedes tener años de experiencia negativos.",
   }),
+  salaryAmount: z.number().min(0, {
+    message: "Tu salario no puede ser negativo.",
+  }),
   currencyCode: z.string().min(1).trim(),
-  workRoleId: z.string().min(1).trim(),
-  rolId: z.string().min(1).trim(),
+
+  typeOfEmployment: z.nativeEnum(TypeOfEmployment),
+  workMetodology: z.nativeEnum(WorkMetodology),
+  countryCode: z.string().min(1).trim(),
+  companyId: z.string().min(1).trim(),
+
+  gender: z.nativeEnum(Gender),
+  genderOtherText: z.string().trim(),
+
+  confirmationToken: z.string().min(1).trim(),
 });
+
+const defaultSeniorityId = "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d";
 
 const countries = getCountryDataList();
 const SuspendableCreateSalaryForm = ({
-  onFinish,
+  // onFinish,
+  workRoles,
 }: {
   onFinish: () => void;
+  workRoles: GetWorkEmailsStatusQuery["workRoles"];
 }) => {
-  const { data } = useGetUserSalariesSuspenseQuery();
+  const [createSalaryMutation, createSalaryMutationResponse] =
+    useCreateSalaryMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      rolId: "",
-    },
   });
+  const seniorities = useMemo(() => {
+    const seniorityMap: Record<string, { id: string; name: string }[]> = {};
+    for (const workRole of workRoles) {
+      seniorityMap[workRole.id] = workRole.seniorities?.filter(
+        (el) => el.id !== defaultSeniorityId,
+      );
+    }
+    return seniorityMap;
+  }, [workRoles]);
+  const workRoleId = form.watch("workRoleId");
+  const numberOfSeniorities = seniorities[workRoleId]?.length;
+  useEffect(() => {
+    if (numberOfSeniorities === 1) {
+      form.setValue("workSeniorityId", defaultSeniorityId);
+    } else {
+      form.setValue("workSeniorityId", "");
+    }
+  }, [form, numberOfSeniorities]);
+
+  const shouldShowSeniority = Boolean(workRoleId) && numberOfSeniorities > 1;
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(form.getValues());
+    await createSalaryMutation({
+      variables: {
+        input: {
+          amount: values.salaryAmount,
+          currencyCode: values.currencyCode,
+          yearsOfExperience: values.yearsOfExperience,
+          confirmationToken: values.confirmationToken,
+          countryCode: values.countryCode,
+          gender: values.gender,
+          genderOtherText: values.genderOtherText,
+          workRoleId: values.workRoleId,
+          workSeniorityId: values.workSeniorityId,
+          workMetodology: values.workMetodology,
+          typeOfEmployment: values.typeOfEmployment,
+          companyId: values.companyId,
+        },
+      },
+    });
     // onFinish();
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex flex-col gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
+        <div className="flex flex-col gap-5">
+          <FormField
+            control={form.control}
+            name="workRoleId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>¿Cual es tu rol actual?</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Selecciona el rol que tienes actualmente en tu empresa" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {workRoles.map((workRole) => (
+                        <SelectItem key={workRole.id} value={workRole.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{workRole.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {shouldShowSeniority && (
+            <FormField
+              control={form.control}
+              name="workSeniorityId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>¿Cuál es tu grado de senioridad?</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      disabled={!workRoleId}
+                    >
+                      <SelectTrigger className="w-[280px]">
+                        <SelectValue placeholder="Selecciona que seniority tienes en tu cargo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {seniorities[workRoleId]?.map((seniority) => (
+                          <SelectItem key={seniority.id} value={seniority.id}>
+                            <div className="flex items-center gap-2">
+                              <span>{seniority.name}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
           <FormField
             control={form.control}
             name="salaryAmount"
@@ -273,7 +402,9 @@ const SuspendableCreateSalaryForm = ({
         <Separator />
 
         <div className="flex flex-col gap-4">(Opcional) Cuéntanos de ti.</div>
-        <Button type="submit">Submit</Button>
+        <Button disabled={createSalaryMutationResponse.loading} type="submit">
+          Submit
+        </Button>
       </form>
     </Form>
   );
@@ -302,21 +433,25 @@ const FormSekeleton = () => {
 };
 export const PersonalQuestionsForm = ({
   onFinish,
+  data,
 }: {
   onFinish: () => void;
+  data: GetWorkEmailsStatusQuery;
 }) => {
   return (
     <>
       <CardHeader>
         <CardTitle>Cúentanos de tu rol</CardTitle>
         <CardDescription>
-          Agrega información de tu salario y cargo. Esta información será
-          anonimizada antes de ser publica.
+          Esta información será anonimizada antes de ser publicada.
         </CardDescription>
       </CardHeader>
       <CardContent>
         <React.Suspense fallback={<FormSekeleton />}>
-          <SuspendableCreateSalaryForm onFinish={onFinish} />
+          <SuspendableCreateSalaryForm
+            onFinish={onFinish}
+            workRoles={data.workRoles}
+          />
         </React.Suspense>
       </CardContent>
     </>

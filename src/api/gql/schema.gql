@@ -70,6 +70,7 @@ input CreateSalaryInput {
   typeOfEmployment: TypeOfEmployment!
   workMetodology: WorkMetodology!
   workRoleId: String!
+  workSeniorityId: String!
   yearsOfExperience: Int!
 }
 
@@ -298,6 +299,9 @@ type Query {
   """Get a list of validated work emails for the user"""
   workEmails: [ValidatedWorkEmail!]!
 
+  """Get a a work role's seniorities"""
+  workRoleSeniorities(input: WorkRoleSenioritiesInput!): [WorkSeniority!]!
+
   """Get a list of possible work roles"""
   workRoles: [WorkRole!]!
 }
@@ -314,6 +318,7 @@ type Salary {
   typeOfEmployment: TypeOfEmployment!
   workMetodology: WorkMetodology!
   workRole: WorkRole!
+  workSeniority: WorkSeniority!
   yearsOfExperience: Int!
 }
 
@@ -404,7 +409,7 @@ enum TicketRedemptionStatus {
 
 enum TicketStatus {
   active
-  cancelled
+  inactive
 }
 
 enum TicketTemplateStatus {
@@ -452,6 +457,7 @@ input UpdateSalaryInput {
   typeOfEmployment: TypeOfEmployment
   workMetodology: WorkMetodology
   workRoleId: String
+  workSeniorityId: String
   yearsOfExperience: Int
 }
 
@@ -497,12 +503,23 @@ enum WorkMetodology {
   remote
 }
 
-"""Representation of a workEmail"""
+"""Representation of a work role"""
 type WorkRole {
-  description: String!
+  description: String
   id: String!
   name: String!
-  seniority: String!
+  seniorities: [WorkSeniority!]!
+}
+
+input WorkRoleSenioritiesInput {
+  workRoleId: String!
+}
+
+"""Representation of a work seniority"""
+type WorkSeniority {
+  description: String
+  id: String!
+  name: String!
 }
 
 input updateUserRoleInCommunityInput {

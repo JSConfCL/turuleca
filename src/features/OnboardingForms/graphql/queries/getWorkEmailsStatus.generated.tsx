@@ -11,7 +11,7 @@ const defaultOptions = {} as const;
 export type GetWorkEmailsStatusQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkEmailsStatusQuery = { __typename?: 'Query', workEmails: Array<{ __typename?: 'ValidatedWorkEmail', id: string, isValidated: boolean, status: Types.EmailStatus, workEmail: string }> };
+export type GetWorkEmailsStatusQuery = { __typename?: 'Query', workEmails: Array<{ __typename?: 'ValidatedWorkEmail', id: string, isValidated: boolean, status: Types.EmailStatus, workEmail: string }>, salaries: Array<{ __typename?: 'Salary', id: string }>, workRoles: Array<{ __typename?: 'WorkRole', description?: string | null, id: string, name: string, seniorities: Array<{ __typename?: 'WorkSeniority', id: string, name: string, description?: string | null }> }> };
 
 
 export const GetWorkEmailsStatusDocument = gql`
@@ -21,6 +21,19 @@ export const GetWorkEmailsStatusDocument = gql`
     isValidated
     status
     workEmail
+  }
+  salaries {
+    id
+  }
+  workRoles {
+    description
+    id
+    name
+    seniorities {
+      id
+      name
+      description
+    }
   }
 }
     `;

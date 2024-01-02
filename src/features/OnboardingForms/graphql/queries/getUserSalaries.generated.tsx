@@ -12,7 +12,7 @@ const defaultOptions = {} as const;
 export type GetUserSalariesQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetUserSalariesQuery = { __typename?: 'Query', salaries: Array<{ __typename?: 'Salary', amount: number, countryCode: string, currencyCode: string, gender?: Types.Gender | null, genderOtherText?: string | null, id: string, typeOfEmployment: Types.TypeOfEmployment, workMetodology: Types.WorkMetodology, yearsOfExperience: number, company: { __typename?: 'Company', description?: string | null, domain: string }, workRole: { __typename?: 'WorkRole', description: string, id: string, name: string, seniority: string } }> };
+export type GetUserSalariesQuery = { __typename?: 'Query', salaries: Array<{ __typename?: 'Salary', amount: number, countryCode: string, currencyCode: string, gender?: Types.Gender | null, genderOtherText?: string | null, id: string, typeOfEmployment: Types.TypeOfEmployment, workMetodology: Types.WorkMetodology, yearsOfExperience: number, company: { __typename?: 'Company', description?: string | null, domain: string }, workRole: { __typename?: 'WorkRole', description?: string | null, id: string, name: string } }> };
 
 
 export const GetUserSalariesDocument = gql`

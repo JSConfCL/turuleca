@@ -5,7 +5,7 @@
 import * as Types from '../../../../api/gql/graphql';
 
 import { gql } from '@apollo/client';
-export type SalaryFragment = { __typename?: 'Salary', amount: number, countryCode: string, currencyCode: string, gender?: Types.Gender | null, genderOtherText?: string | null, id: string, typeOfEmployment: Types.TypeOfEmployment, workMetodology: Types.WorkMetodology, yearsOfExperience: number, company: { __typename?: 'Company', description?: string | null, domain: string }, workRole: { __typename?: 'WorkRole', description: string, id: string, name: string, seniority: string } };
+export type SalaryFragment = { __typename?: 'Salary', amount: number, countryCode: string, currencyCode: string, gender?: Types.Gender | null, genderOtherText?: string | null, id: string, typeOfEmployment: Types.TypeOfEmployment, workMetodology: Types.WorkMetodology, yearsOfExperience: number, company: { __typename?: 'Company', description?: string | null, domain: string }, workRole: { __typename?: 'WorkRole', description?: string | null, id: string, name: string } };
 
 export const SalaryFragmentDoc = gql`
     fragment Salary on Salary {
@@ -16,7 +16,6 @@ export const SalaryFragmentDoc = gql`
   }
   countryCode
   currencyCode
-  amount
   gender
   genderOtherText
   id
@@ -26,7 +25,6 @@ export const SalaryFragmentDoc = gql`
     description
     id
     name
-    seniority
   }
   yearsOfExperience
 }

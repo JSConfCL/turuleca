@@ -3,15 +3,10 @@ import { PersonalQuestionsForm } from "./PersonalQuestionsForm";
 import { AnimatePresence } from "framer-motion";
 import { WorkEmailValidationForm } from "./WorkEmailValidation";
 import { VerticalTransitionContainer } from "../../components/FramerTransitions/VerticalTransitionContainer";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
+import { Card, CardContent, CardFooter } from "../../components/ui/card";
 import { VerticalStepper } from "../../components/Stepper/VerticalStepper";
 import { Button } from "../../components/ui/button";
+import { GetWorkEmailsStatusQuery } from "./graphql/queries/getWorkEmailsStatus.generated";
 
 export type OnboardingStep = {
   id: string;
@@ -23,9 +18,11 @@ export type OnboardingStep = {
 export const OnboardingForms = ({
   steps,
   initialStep = 0,
+  data,
 }: {
   steps: OnboardingStep[];
   initialStep: number;
+  data: GetWorkEmailsStatusQuery;
 }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
   const moveNext = () => {
@@ -42,9 +39,8 @@ export const OnboardingForms = ({
     <>
       <div className="col-span-4">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-right">Falta poco 🎉</CardTitle>
-          </CardHeader>
+          {/* Dummy placeholder */}
+          <CardFooter />
           <CardContent>
             <VerticalStepper
               steps={steps}
@@ -70,6 +66,7 @@ export const OnboardingForms = ({
             {currentStep.id === "2" && (
               <VerticalTransitionContainer key={"2"}>
                 <PersonalQuestionsForm
+                  data={data}
                   onFinish={() => setCurrentStepIndex(2)}
                 />
               </VerticalTransitionContainer>

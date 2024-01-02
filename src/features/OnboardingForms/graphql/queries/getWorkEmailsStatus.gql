@@ -5,4 +5,17 @@ query GetWorkEmailsStatus {
     status
     workEmail
   }
+  salaries {
+    id
+  }
+  workRoles {
+    description
+    id
+    name
+    seniorities {
+      id
+      name
+      description
+    }
+  }
 }

@@ -6,7 +6,6 @@ fragment Salary on Salary {
   }
   countryCode
   currencyCode
-  amount
   gender
   genderOtherText
   id
@@ -16,7 +15,6 @@ fragment Salary on Salary {
     description
     id
     name
-    seniority
   }
   yearsOfExperience
 }

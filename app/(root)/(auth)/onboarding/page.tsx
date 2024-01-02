@@ -26,13 +26,15 @@ const steps = [
 
 const Suspended = () => {
   const { data } = useGetWorkEmailsStatusSuspenseQuery();
-  const initialStep =
+  const hasValidatedWorkEmails =
     data?.workEmails?.filter(
       (workEmail) => workEmail.status === EmailStatus.Confirmed,
-    ).length >= 1
-      ? 1
-      : 0;
-  return <OnboardingForms steps={steps} initialStep={initialStep} />;
+    ).length >= 1;
+  const hasAddedSalaries = data?.salaries?.length >= 1;
+  const initialStep = hasValidatedWorkEmails ? (hasAddedSalaries ? 2 : 1) : 0;
+  return (
+    <OnboardingForms steps={steps} initialStep={initialStep} data={data} />
+  );
 };
 
 export default function Page() {
