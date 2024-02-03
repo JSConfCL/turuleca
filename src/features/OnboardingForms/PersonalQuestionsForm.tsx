@@ -118,6 +118,7 @@ const SuspendableCreateSalaryForm = ({
     return seniorityMap;
   }, [workRoles]);
   const workRoleId = form.watch("workRoleId");
+  const gender = form.watch("gender");
   const numberOfSeniorities = seniorities[workRoleId]?.length;
   useEffect(() => {
     if (numberOfSeniorities === 1) {
@@ -157,14 +158,17 @@ const SuspendableCreateSalaryForm = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-10">
-        <div className="flex flex-col gap-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-10"
+      >
+        <div className="flex flex-col gap-8">
           <FormField
             control={form.control}
             name="workRoleId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>¿Cual es tu rol actual?</FormLabel>
+                <FormLabel>¿Cuál es tu rol actual?</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -184,6 +188,12 @@ const SuspendableCreateSalaryForm = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
+                <FormDescription>
+                  Considera que algunos roles no tienen el mismo nombre en todas
+                  las empresas. (Software engineer y Full-stack Developer, por
+                  ejemplo). Por lo que te recomendamos que selecciones el rol
+                  que más se asemeje al tuyo.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -215,6 +225,12 @@ const SuspendableCreateSalaryForm = ({
                       </SelectContent>
                     </Select>
                   </FormControl>
+                  <FormDescription>
+                    No todas las empresas se basan en el mismo seniority. Te
+                    recomendamos que selecciones el que más se asemeje a tu rol
+                    actual. Si no encuentras tu seniority, puedes enviarnos un
+                    mensaje y lo arreglaremos.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -225,18 +241,18 @@ const SuspendableCreateSalaryForm = ({
             name="salaryAmount"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cual es tu salario mensual?</FormLabel>
+                <FormLabel>¿Cuál es tu salario mensual?</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="$"
+                    placeholder="💰"
                     {...field}
                     type="number"
                     onChange={(event) => field.onChange(+event.target.value)}
                   />
                 </FormControl>
                 <FormDescription>
-                  Considera tu salario post impuestos, y contribuciones
-                  sociales.
+                  Considera tu salario{" "}
+                  <b>post impuestos, y contribuciones sociales.</b>
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -247,14 +263,14 @@ const SuspendableCreateSalaryForm = ({
             name="currencyCode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>En que moneda recibes tu salario?</FormLabel>
+                <FormLabel>¿En que moneda recibes tu salario?</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Selecciona el pais en el que trabajas" />
+                      <SelectValue placeholder="Selecciona una moneda" />
                     </SelectTrigger>
                     <SelectContent>
                       {countries.map((country) => (
@@ -268,58 +284,32 @@ const SuspendableCreateSalaryForm = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormDescription>En que pais trabajas?</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="workRoleId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>En que moneda recibes tu salario?</FormLabel>
-                <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Selecciona el pais en el que trabajas" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {countries.map((country) => (
-                        <SelectItem key={country.iso2} value={country.iso2}>
-                          <div className="flex items-center gap-2">
-                            <span>{country.name}</span>
-                            <span>{getEmojiFlag(country.iso2)}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormDescription>En que pais trabajas?</FormDescription>
+                <FormDescription>
+                  Por ejemplo, puedes vivir en México o Uruguay, pero recibir un
+                  sueldo en dólares estadounidenses, en ese caso, selecciona
+                  Estados Unidos.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <Separator />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-8">
           <FormField
             control={form.control}
             name="typeOfEmployment"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Como es tu tipo de empleo?</FormLabel>
+                <FormLabel>
+                  ¿Cuál es tu <b>tipo</b> de empleo?
+                </FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Tipo de Empleo" />
+                      <SelectValue placeholder="Selecciona tu tipo de empleo" />
                     </SelectTrigger>
                     <SelectContent>
                       {Object.values(TypeOfEmployment).map((type) => (
@@ -331,7 +321,7 @@ const SuspendableCreateSalaryForm = ({
                   </Select>
                 </FormControl>
                 <FormDescription>
-                  This is your public display name.
+                  Full-time, Part-time, Freelance, etc.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -342,14 +332,14 @@ const SuspendableCreateSalaryForm = ({
             name="workMetodology"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Metodología de trabajo</FormLabel>
+                <FormLabel>¿Con qué metodología trabajas?</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="w-[280px]">
-                      <SelectValue placeholder="Selecciona tipo de Empleo" />
+                      <SelectValue placeholder="Selecciona una metodología de trabajo" />
                     </SelectTrigger>
                     <SelectContent>
                       {Object.values(WorkMetodology).map((type) => (
@@ -360,9 +350,7 @@ const SuspendableCreateSalaryForm = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormDescription>
-                  Como trabajas (Remoto, Oficina, etc)
-                </FormDescription>
+                <FormDescription>En oficina, Remoto, etc</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -372,7 +360,7 @@ const SuspendableCreateSalaryForm = ({
             name="countryCode"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>En que pais trabajas?</FormLabel>
+                <FormLabel>¿En que pais trabajas?</FormLabel>
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -393,18 +381,66 @@ const SuspendableCreateSalaryForm = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormDescription>En que pais trabajas?</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
         <Separator />
-
-        <div className="flex flex-col gap-4">(Opcional) Cuéntanos de ti.</div>
-        <Button disabled={createSalaryMutationResponse.loading} type="submit">
-          Submit
-        </Button>
+        <div className="flex flex-col gap-8">
+          <span>
+            <b>(Opcional)</b> Cuéntanos más de ti.
+          </span>
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>¿Cual es tu género?</FormLabel>
+                <FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[280px]">
+                      <SelectValue placeholder="Selecciona tu género" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(Gender).map(([key, value]) => (
+                        <SelectItem key={key} value={value}>
+                          <div className="flex items-center gap-2">
+                            <span>{key}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {gender === Gender.Other && (
+            <FormField
+              control={form.control}
+              name="genderOtherText"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Otro: ¿Cuál?</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder="¿Cual?" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </div>
+        <div className="flex justify-end">
+          <Button disabled={createSalaryMutationResponse.loading} type="submit">
+            Submit
+          </Button>
+        </div>
       </form>
     </Form>
   );
@@ -441,11 +477,14 @@ export const PersonalQuestionsForm = ({
   return (
     <>
       <CardHeader>
-        <CardTitle>Cúentanos de tu rol</CardTitle>
+        <CardTitle>Cúentanos de tí!</CardTitle>
         <CardDescription>
-          Esta información será anonimizada antes de ser publicada.
+          (Toda información será anonimizada antes de ser publicada).
         </CardDescription>
       </CardHeader>
+      <div className="pb-6">
+        <Separator />
+      </div>
       <CardContent>
         <React.Suspense fallback={<FormSekeleton />}>
           <SuspendableCreateSalaryForm

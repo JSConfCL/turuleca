@@ -5,22 +5,20 @@
 import * as Types from '../../../../api/gql/graphql';
 
 import { gql } from '@apollo/client';
+import { WorkEmailFragmentDoc } from '../fragments/workEmailFragment.generated';
 import * as Apollo from '@apollo/client';
 import * as ApolloReactHooks from '@/api/ApolloHooks';
 const defaultOptions = {} as const;
 export type GetWorkEmailsStatusQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type GetWorkEmailsStatusQuery = { __typename?: 'Query', workEmails: Array<{ __typename?: 'ValidatedWorkEmail', id: string, isValidated: boolean, status: Types.EmailStatus, workEmail: string }>, salaries: Array<{ __typename?: 'Salary', id: string }>, workRoles: Array<{ __typename?: 'WorkRole', description?: string | null, id: string, name: string, seniorities: Array<{ __typename?: 'WorkSeniority', id: string, name: string, description?: string | null }> }> };
+export type GetWorkEmailsStatusQuery = { __typename?: 'Query', workEmails: Array<{ __typename?: 'ValidatedWorkEmail', id: string, isValidated: boolean, status: Types.EmailStatus, workEmail: string, confirmationDate?: any | null }>, salaries: Array<{ __typename?: 'Salary', id: string }>, workRoles: Array<{ __typename?: 'WorkRole', description?: string | null, id: string, name: string, seniorities: Array<{ __typename?: 'WorkSeniority', id: string, name: string, description?: string | null }> }> };
 
 
 export const GetWorkEmailsStatusDocument = gql`
     query GetWorkEmailsStatus {
   workEmails {
-    id
-    isValidated
-    status
-    workEmail
+    ...WorkEmail
   }
   salaries {
     id
@@ -36,7 +34,7 @@ export const GetWorkEmailsStatusDocument = gql`
     }
   }
 }
-    `;
+    ${WorkEmailFragmentDoc}`;
 
 /**
  * __useGetWorkEmailsStatusQuery__

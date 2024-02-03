@@ -14,13 +14,14 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "fragment Salary on Salary {\n  amount\n  company {\n    description\n    domain\n  }\n  countryCode\n  currencyCode\n  gender\n  genderOtherText\n  id\n  typeOfEmployment\n  workMetodology\n  workRole {\n    description\n    id\n    name\n  }\n  yearsOfExperience\n}": types.SalaryFragmentDoc,
+    "fragment WorkEmail on ValidatedWorkEmail {\n  id\n  isValidated\n  status\n  workEmail\n  confirmationDate\n}": types.WorkEmailFragmentDoc,
     "mutation CreateSalary($input: CreateSalaryInput!) {\n  createSalary(input: $input) {\n    ...Salary\n  }\n}": types.CreateSalaryDocument,
     "mutation SubmitWorkEmail($email: String!) {\n  startWorkEmailValidation(email: $email) {\n    id\n    isValidated\n  }\n}": types.SubmitWorkEmailDocument,
     "mutation SubmitWorkEmailCodeValidation($confirmationToken: String!) {\n  validateWorkEmail(confirmationToken: $confirmationToken) {\n    id\n    isValidated\n  }\n}": types.SubmitWorkEmailCodeValidationDocument,
     "mutation UpdateSalary($input: UpdateSalaryInput!) {\n  updateSalary(input: $input) {\n    ...Salary\n  }\n}": types.UpdateSalaryDocument,
     "query GetUserSalaries {\n  salaries {\n    ...Salary\n  }\n}": types.GetUserSalariesDocument,
     "query GetOnboardingInformation($email: String!) {\n  workEmail(email: $email) {\n    id\n    isValidated\n  }\n}": types.GetOnboardingInformationDocument,
-    "query GetWorkEmailsStatus {\n  workEmails {\n    id\n    isValidated\n    status\n    workEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}": types.GetWorkEmailsStatusDocument,
+    "query GetWorkEmailsStatus {\n  workEmails {\n    ...WorkEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}": types.GetWorkEmailsStatusDocument,
 };
 
 /**
@@ -41,6 +42,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "fragment Salary on Salary {\n  amount\n  company {\n    description\n    domain\n  }\n  countryCode\n  currencyCode\n  gender\n  genderOtherText\n  id\n  typeOfEmployment\n  workMetodology\n  workRole {\n    description\n    id\n    name\n  }\n  yearsOfExperience\n}"): (typeof documents)["fragment Salary on Salary {\n  amount\n  company {\n    description\n    domain\n  }\n  countryCode\n  currencyCode\n  gender\n  genderOtherText\n  id\n  typeOfEmployment\n  workMetodology\n  workRole {\n    description\n    id\n    name\n  }\n  yearsOfExperience\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "fragment WorkEmail on ValidatedWorkEmail {\n  id\n  isValidated\n  status\n  workEmail\n  confirmationDate\n}"): (typeof documents)["fragment WorkEmail on ValidatedWorkEmail {\n  id\n  isValidated\n  status\n  workEmail\n  confirmationDate\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -68,7 +73,7 @@ export function graphql(source: "query GetOnboardingInformation($email: String!)
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query GetWorkEmailsStatus {\n  workEmails {\n    id\n    isValidated\n    status\n    workEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}"): (typeof documents)["query GetWorkEmailsStatus {\n  workEmails {\n    id\n    isValidated\n    status\n    workEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}"];
+export function graphql(source: "query GetWorkEmailsStatus {\n  workEmails {\n    ...WorkEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}"): (typeof documents)["query GetWorkEmailsStatus {\n  workEmails {\n    ...WorkEmail\n  }\n  salaries {\n    id\n  }\n  workRoles {\n    description\n    id\n    name\n    seniorities {\n      id\n      name\n      description\n    }\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

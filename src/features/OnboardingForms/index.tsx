@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter } from "../../components/ui/card";
 import { VerticalStepper } from "../../components/Stepper/VerticalStepper";
 import { Button } from "../../components/ui/button";
 import { GetWorkEmailsStatusQuery } from "./graphql/queries/getWorkEmailsStatus.generated";
+import { EmailStatus } from "../../api/gql/graphql";
 
 export type OnboardingStep = {
   id: string;
@@ -24,6 +25,10 @@ export const OnboardingForms = ({
   initialStep: number;
   data: GetWorkEmailsStatusQuery;
 }) => {
+  const pendingEmailValidation = data.workEmails?.filter(
+    (workEmail) => workEmail.status === EmailStatus.Pending,
+  )?.[0];
+
   const [currentStepIndex, setCurrentStepIndex] = useState(initialStep);
   const moveNext = () => {
     setCurrentStepIndex((prev) => Math.min(prev + 1, steps.length - 1));
@@ -59,6 +64,7 @@ export const OnboardingForms = ({
             {currentStep.id === "1" && (
               <VerticalTransitionContainer key={"1"}>
                 <WorkEmailValidationForm
+                  pendingEmailValidation={pendingEmailValidation}
                   onFinish={() => setCurrentStepIndex(1)}
                 />
               </VerticalTransitionContainer>

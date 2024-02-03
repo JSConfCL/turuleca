@@ -9,7 +9,7 @@ const steps = [
     id: "1",
     number: 1,
     title: "Tu correo",
-    description: "Valida tu correo laboral..",
+    description: "Valida tu correo laboral.",
   },
   {
     id: "2",
@@ -32,6 +32,9 @@ const Suspended = () => {
     ).length >= 1;
   const hasAddedSalaries = data?.salaries?.length >= 1;
   const initialStep = hasValidatedWorkEmails ? (hasAddedSalaries ? 2 : 1) : 0;
+  if (hasValidatedWorkEmails && hasAddedSalaries) {
+    // TODO: this means the user has already done an onboarding.
+  }
   return (
     <OnboardingForms steps={steps} initialStep={initialStep} data={data} />
   );

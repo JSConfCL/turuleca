@@ -1,9 +1,6 @@
 query GetWorkEmailsStatus {
   workEmails {
-    id
-    isValidated
-    status
-    workEmail
+    ...WorkEmail
   }
   salaries {
     id

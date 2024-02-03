@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import {
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
@@ -28,6 +29,9 @@ import { useSubmitWorkEmailMutation } from "./graphql/mutations/submitWorkEmail.
 import { useSubmitWorkEmailCodeValidationMutation } from "./graphql/mutations/submitWorkEmailCodeValidation.generated";
 import { useGetOnboardingInformationLazyQuery } from "./graphql/queries/getWorkEmailInformation.generated";
 import { z } from "../../components/Forms/zod";
+import { WorkEmailFragment } from "./graphql/fragments/workEmailFragment.generated";
+import { EmailStatus } from "../../api/gql/graphql";
+import { InternalTextLink } from "../../components/TextLink/Internal";
 
 const AnimatedCardHeader = motion(CardHeader);
 const AnimatedCardContent = motion(CardContent);
@@ -56,8 +60,10 @@ enum Step {
 }
 
 export const WorkEmailValidationForm = ({
+  pendingEmailValidation,
   onFinish,
 }: {
+  pendingEmailValidation?: WorkEmailFragment;
   onFinish: () => void;
 }) => {
   const [submitWorkEmailMutation, submitWorkEmailMutationSatus] =
@@ -66,12 +72,16 @@ export const WorkEmailValidationForm = ({
     useGetOnboardingInformationLazyQuery();
   const [submitWorkEmailCodeValidationMutation] =
     useSubmitWorkEmailCodeValidationMutation();
-  const [step, setStep] = useState<Step>(Step.EmailValidation);
+  const [step, setStep] = useState<Step>(
+    pendingEmailValidation?.status === EmailStatus.Pending
+      ? Step.CodeVerification
+      : Step.EmailValidation,
+  );
   const refSubmitButtom = useRef<HTMLButtonElement>(null);
   const emailForm = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
     defaultValues: {
-      email: "",
+      email: pendingEmailValidation?.workEmail || "",
     },
   });
   const codeForm = useForm<z.infer<typeof codeSchema>>({
@@ -145,7 +155,7 @@ export const WorkEmailValidationForm = ({
             <CardDescription>
               Te enviamos un código de verificación a tu correo{" "}
               <span className="font-bold">{email}</span>. Revisa tu bandeja de
-              entrada (o SPAM), y pega el código aquí.
+              entrada <i>(o SPAM)</i>, e ingresa el código que te enviamos acá.
             </CardDescription>
           </AnimatedCardHeader>
         )}
@@ -188,47 +198,81 @@ export const WorkEmailValidationForm = ({
           </AnimatedCardContent>
         )}
         {step === Step.CodeVerification && (
-          <AnimatedCardContent
-            {...verticalTransitionProps}
-            key={"body" + Step.CodeVerification}
-          >
-            <Form {...codeForm}>
-              <form
-                onSubmit={codeForm.handleSubmit(onSubmitCodeValidation)}
-                className="space-y-8"
-              >
-                <FormField
-                  control={codeForm.control}
-                  name="verificationCode"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Código de Verificación</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="xxxx-xxxxx-xxxx"
-                          {...field}
-                          onPaste={() => {
-                            // TODO: This is a hack to make the form submit and
-                            // validate right after the user pastes the code.
-                            refSubmitButtom.current?.click();
-                          }}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Ingresa el código que te enviamos a tu correo aquí
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div className="flex justify-end">
-                  <Button type="submit" ref={refSubmitButtom}>
-                    Validar
+          <>
+            <AnimatedCardContent
+              {...verticalTransitionProps}
+              key={"body" + Step.CodeVerification}
+            >
+              <Form {...codeForm}>
+                <form
+                  onSubmit={codeForm.handleSubmit(onSubmitCodeValidation)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={codeForm.control}
+                    name="verificationCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Código de Verificación</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="xxxx-xxxxx-xxxx"
+                            {...field}
+                            onPaste={() => {
+                              // TODO: This is a hack to make the form submit and
+                              // validate right after the user pastes the code.
+                              refSubmitButtom.current?.click();
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div className="flex justify-end">
+                    <Button type="submit" ref={refSubmitButtom}>
+                      Validar
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </AnimatedCardContent>
+            <CardFooter>
+              {/*
+                TODO: This is a placeholder for a resend code button. Enable once we create the mutation
+                <p>
+                  <small>
+                    No debería demorarse más de 5 minutos, si no recibiste el
+                    código, puedes volver a solicitarlo{" "}
+                    <Button
+                      variant="link"
+                      onClick={(e) => {
+                        e.preventDefault();
+                      }}
+                    >
+                      acá
+                    </Button>
+                  </small>
+                </p>
+              */}
+              <p>
+                <small>
+                  Si quieres cambiar el correo laboral con el que iniciaste este
+                  proceso, haz click{" "}
+                  <Button
+                    className="p-0 font-bold underline"
+                    variant="link"
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  >
+                    acá
                   </Button>
-                </div>
-              </form>
-            </Form>
-          </AnimatedCardContent>
+                  .
+                </small>
+              </p>
+            </CardFooter>
+          </>
         )}
       </AnimatePresence>
     </>

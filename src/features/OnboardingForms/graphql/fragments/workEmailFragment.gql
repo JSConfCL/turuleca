@@ -1,0 +1,7 @@
+fragment WorkEmail on ValidatedWorkEmail {
+  id
+  isValidated
+  status
+  workEmail
+  confirmationDate
+}
